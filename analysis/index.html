@@ -568,6 +568,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Explore - Carte">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#suivi-en-date-du-18-mai" class="md-nav__link">
+    <span class="md-ellipsis">
+      Suivi (en date du 18 mai)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -786,6 +801,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Explore - Carte">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#suivi-en-date-du-18-mai" class="md-nav__link">
+    <span class="md-ellipsis">
+      Suivi (en date du 18 mai)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -877,10 +907,15 @@ La solution proposée est la suivante. Il faudrait permettre la création automa
 <p>Deux options concernant l'implémentation de la carte s'ouvre à nous. En fait, la 2e option sera choisite uniquement s'il est impossible de trouver une API qui nous fournit de l'information à propos des infrastructures de sports. Les deux options auraient la composante "temporal slider" par un intervalle de temps X (<em>à décider</em>)
 - Option 1 : L'idée principale est d'afficher tous les marqueurs qui chacun, correspond à une infrastructure du sport choisi par l'utilisateur (dans le filtre convenu), sur la carte. De ce fait, même si aucune activité n'a été créée à une infrastructure X, l'utilisateur pourrait tout de même profiter des marqueurs afin de créer une nouvelle activité, sans qu'il est besoin de chercher sur Internet quels terrains ou centres de sports s'offrent à lui (dans le rayon sélectionné).
 - Option 2 : Dans ce scénario, des marqueurs ne seront affichés uniquement si une activité y a été crée. Il n'y aura donc pas la fonctionnalité de créer une activité directement sur la carte, en sélectionnant un marqueur. Cela impose également que l'utilisateur doit faire ses recherches à priori pour trouver quelle infrastructure peut organiser son activité.</p>
+<h4 id="suivi-en-date-du-18-mai">Suivi (en date du 18 mai)<a class="headerlink" href="#suivi-en-date-du-18-mai" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Option 1 : Après plusieurs recherches, il est clair que se fier sur les données ouvertes des grandes villes rendrait la tâche trop complexe. Alors, le choix s'imposerait entre Google Map API ou OpenStreetMap API. L'API de Google Map est limité sur l'identification des installations sportives. Cependant, l'API de OSM est plutôt intéressante même si elle pourrait ne pas être performante pour de plus petites villes. En effet, elle propose un tag <code>sport=*</code> (voir https://wiki.openstreetmap.org/wiki/Key:sport). Une deuxième chose à considérer est que OSM recommande généralement de ne pas dépasser 10 000 requêtes/jour. Cela ne risque pas d'être un problème pour nous au départ mais dans un certain futur, il faudrait considérer la mise en cache locale avec SwiftData.</li>
+</ul>
 <h3 id="explore-liste">Explore - Liste<a class="headerlink" href="#explore-liste" title="Permanent link">&para;</a></h3>
-<p>Une clarification s’imposait concernant la liste des événements. Cette liste représente une vue en format texte des événements affichés sur la carte. Elle est triée en fonction de la distance par rapport à l’adresse indiquée dans le profil de l’utilisateur. Seuls les événements situés dans la même ville que celle de l’adresse fournie y sont affichés.
-Une option de géolocalisation pourrait éventuellement être envisagée afin d’offrir plus de flexibilité dans l’affichage des événements à proximité.</p>
+<p>Une clarification s’imposait concernant la liste des activités. Cette liste représente une vue en format texte des activités affichés sur la carte. Elle est triée en fonction de la distance par rapport à l’adresse indiquée dans le profil de l’utilisateur. Seuls les activités situés dans la même ville que celle de l’adresse fournie y sont affichés.</p>
+<p>Une option de géolocalisation pourrait éventuellement être envisagée afin d’offrir plus de flexibilité dans l’affichage des activités à proximité.</p>
 <h3 id="authentification">Authentification<a class="headerlink" href="#authentification" title="Permanent link">&para;</a></h3>
+<p>En reconsultant la page de création d'un compte à partir du prototype Figma, nous nous sommes rendus compte qu'elle était trop longue et que cette étape diminueraient non seulement l'efficience du processus d'enregistrement mais également la satisfaction d'utilisateur. C'est pourquoi il serait préférable de déplacer toutes les spécifications, après les champs de texte sur le courriel et le mot de passe, dans la configuration du profil une fois l'utilisateur connecté.</p>
 <h2 id="methodologie">Méthodologie<a class="headerlink" href="#methodologie" title="Permanent link">&para;</a></h2>
 
 
