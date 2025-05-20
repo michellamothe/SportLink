@@ -1,0 +1,90 @@
+@startuml SportLink
+
+class Utilisateur {
+  - {field} nomUtilisateur : String
+  - {field} prenom : String
+  - {field} nom : String
+  - {field} courriel : String
+  - {field} motDePasse : String
+  - {field} dateDeNaissance : String
+}
+
+class ProfilUtilisateurVueModele {
+  - {field} utilisateur : Utilisateur
+  - {field} estEnChargement : Bool
+  + {method} modifierMotDePasse(nouveauMotDePasse : String) : void
+  + {method} chargerUtilisateur() : void
+}
+
+class ProfilUtilisateurVue {
+  - {field} vueModele : ProfilUtilisateurVueModele
+}
+
+ProfilUtilisateurVueModele "1" --* "1" Utilisateur
+ProfilUtilisateurVue ..> ProfilUtilisateurVueModele
+
+class Activite {
+  - {field} id : UUID
+  - {field} sport : Sport
+  - {field} intervalleDate : DateInterval 
+  - {field} placesDisponibles : Integer
+  - {field} niveau : Niveau
+  - {field} coordonnees : CLLocationCoordinate2D
+  - {field} messages : [Message]
+}
+
+class ActiviteVueModele {
+  - {field} activite : Activite
+  - {field} estEnChargement : Bool
+}
+
+class ActiviteVue {
+  - {field} vueModele : ActiviteVueModele
+}
+
+ActiviteVueModele "1" --* "1" Activite
+ActiviteVue ..> ActiviteVueModele
+
+enum Niveau {
+  Debutant
+  Intermediaire
+  Avance
+}
+
+enum Sport {
+  Basketball
+  Soccer
+  Volleyball
+  Baseball
+  Tennis
+  Badminton
+  Pickleball
+  Waterpolo
+  Football
+  Rugby
+  Ultimate
+  Hockey
+}
+
+class Message {
+  - {field} id : UUID
+  - {field} contenu : String
+  - {field} envoyeA : Date
+  - {field} expediteur : Utilisateur
+  - {field} idActivite : UUID
+}
+
+class MessageVueModele {
+  - {field} message : Message
+  - {field} estEnChargement : Bool
+}
+
+class MessageVue {
+  - {field} vueModele : MessageVueModele
+}
+
+MessageVueModele "1" --* "1" Message
+MessageVue ..> MessageVueModele
+
+
+@enduml
