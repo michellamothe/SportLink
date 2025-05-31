@@ -556,6 +556,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#modele-de-donnees" class="md-nav__link">
+    <span class="md-ellipsis">
+      Modèle de données
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#prototype" class="md-nav__link">
     <span class="md-ellipsis">
       Prototype
@@ -692,6 +701,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#modele-de-donnees" class="md-nav__link">
+    <span class="md-ellipsis">
+      Modèle de données
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#prototype" class="md-nav__link">
     <span class="md-ellipsis">
       Prototype
@@ -731,6 +749,69 @@
 <h2 id="modeles-et-diagrammes">Modèles et diagrammes<a class="headerlink" href="#modeles-et-diagrammes" title="Permanent link">&para;</a></h2>
 <p>Nous avons décidé de ne pas mettre les sous vues dans le diagramme, car nous pensons qu'il deviendrait trop grossier avec toutes les classes qui n'ont pas nécessairement d'attributs ou de méthodes pertinentes.
 <img alt="Diagramme de classe UML" src="../diagrams/out/SportLink.svg" title="Diagramme de classe UML" /></p>
+<h2 id="modele-de-donnees">Modèle de données<a class="headerlink" href="#modele-de-donnees" title="Permanent link">&para;</a></h2>
+<p>utilisateurs
+├── utilisateurId (doc ID)
+    ├── nomUtilisateur : "mimi123"
+    ├── courriel : "michel@example.com"
+    ├── motDePasseHash : "hashed_pw"
+    ├── photoProfil : "https://..."
+    ├── disponibilites :
+    │   ├── lundi : ["AM", "PM"]
+    │   ├── mardi : ["AM"]
+    │   └── ...
+    ├── sportsFavoris : ["Soccer", "Tennis"]
+    ├── mode : "récréatif" | "compétitif"
+    ├── pointsParSport :
+    │   ├── Soccer : 1200
+    │   ├── Tennis : 800
+    ├── niveauParSport :
+    │   ├── Soccer : 3
+    │   ├── Tennis : 2
+    ├── evenementsOrganises : [eventId1, eventId2]
+    ├── evenementsInscrits : [eventId3]
+    ├── evenementsFavoris : [eventId4]
+    ├── partenairesRecents : [
+    │     {
+    │       utilisateurId : "autreId",
+    │       sport : "Soccer",
+    │       activitesPartagees : 4,
+    │       dernierResultat : "+10"
+    │     }
+    │   ]</p>
+<p>evenements
+├── evenementId (doc ID)
+    ├── organisateurId : "utilisateurId"
+    ├── sport : "Basketball"
+    ├── date : "2025-06-12"
+    ├── heureDebut : "18:00"
+    ├── heureFin : "20:00"
+    ├── lieu :
+    │   ├── nom : "Parc Jean-Drapeau"
+    │   ├── latitude : 45.508
+    │   ├── longitude : -73.554
+    ├── niveau : 2
+    ├── maxParticipants : 6
+    ├── participants : [utilisateurId1, utilisateurId2]
+    ├── statut : "ouvert" | "complet" | "annulé"
+    ├── discussionId : "chat123"</p>
+<p>discussions
+├── discussionId
+    ├── evenementId : "eventId"
+    ├── participants : [utilisateurId1, utilisateurId2]
+    ├── messages : [
+    │     {
+    │       auteurId : "utilisateurId1",
+    │       contenu : "Salut !",
+    │       timestamp : "2025-05-31T12:10:00"
+    │     }
+    │   ]</p>
+<ul>
+<li>Filtre par sport : index sport</li>
+<li>Filtre par date : index date</li>
+<li>Filtre par niveau : index niveau (mode compétitif)</li>
+<li>Tri par distance : via géohash ou librairie comme geofirestore</li>
+</ul>
 <h2 id="prototype">Prototype<a class="headerlink" href="#prototype" title="Permanent link">&para;</a></h2>
 <p>La maquette Figma se trouve <a href="https://www.figma.com/design/N0QDEh5Shuht6eS3dpvKTB/SportLink?node-id=0-1&amp;t=CBkQlTjm84oNgfAk-1">ici</a>.</p>
 <p><img alt="Flow 1" src="../gifs/Flow-1.gif" />

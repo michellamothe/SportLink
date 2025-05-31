@@ -7,13 +7,29 @@ class Utilisateur {
   - {field} courriel : String
   - {field} motDePasse : String
   - {field} dateDeNaissance : String
+  - {field} trancheAge : TrancheAge
+  - {field} ville : String
+  - {field} sportsFavoris : List<Sport>
+  - {field} disponibilites : List<JourSemaine>
+  - {field} photoProfil : String
+
+  + {method} ModeUtilisateur
 }
+
+class GestionUtilisateur {
+    + inscrire(courriel : String, nomUtilisateur : String, motDePasse : String) : Bool
+    + connecter(courriel : String, motDePasse : String) : Utilisateur
+}
+
+GestionUtilisateur --> Utilisateur : utilise
 
 class ProfilUtilisateurVueModele {
   - {field} utilisateur : Utilisateur
   - {field} estEnChargement : Bool
   + {method} modifierMotDePasse(nouveauMotDePasse : String) : void
   + {method} chargerUtilisateur() : void
+  + {method} modifierProfil(trancheAge : TrancheAge, ville : String, sportsFavoris : List<Sport>, disponibilites : List<JourSemaine>, photoProfil : String) : void
+  + {method} changerPhotoProfil(nouvellePhoto : String) : void
 }
 
 class ProfilUtilisateurVue {
@@ -30,7 +46,8 @@ class Activite {
   - {field} placesDisponibles : Integer
   - {field} niveau : Niveau
   - {field} coordonnees : CLLocationCoordinate2D
-  - {field} messages : [Message]
+  - {field} messages : List<Message>
+  - {field} mode : ModeUtilisateur
 }
 
 class ActiviteVueModele {
@@ -44,6 +61,40 @@ class ActiviteVue {
 
 ActiviteVueModele "1" --* "1" Activite
 ActiviteVue ..> ActiviteVueModele
+
+class CreationEvenementVueModele {
+  - utilisateur : Utilisateur
+  + {method} creerEvenement(date : Date, sport : Sport, places : Integer, debut : String, fin : String, lieu : String) : Activite
+  + {method} creerEvenementCompetitif(date : Date, sport : Sport, places : Integer, debut : String, fin : String, lieu : String, niveau : Niveau) : Activite
+}
+
+class CreationEvenementVue {
+  - vueModele : CreationEvenementVueModele
+}
+
+CreationEvenementVue ..> CreationEvenementVueModele
+CreationEvenementVueModele --> Utilisateur : selon le mode
+CreationEvenementVueModele --> Activite : crée
+
+class Message {
+  - {field} id : UUID
+  - {field} contenu : String
+  - {field} envoyeA : Date
+  - {field} expediteur : Utilisateur
+  - {field} idActivite : UUID
+}
+
+class MessageVueModele {
+  - {field} message : Message
+  - {field} estEnChargement : Bool
+}
+
+class MessageVue {
+  - {field} vueModele : MessageVueModele
+}
+
+MessageVueModele "1" --* "1" Message
+MessageVue ..> MessageVueModele
 
 enum Niveau {
   Debutant
@@ -66,25 +117,29 @@ enum Sport {
   Hockey
 }
 
-class Message {
-  - {field} id : UUID
-  - {field} contenu : String
-  - {field} envoyeA : Date
-  - {field} expediteur : Utilisateur
-  - {field} idActivite : UUID
+enum ModeUtilisateur {
+  Recreatif
+  Competitif
 }
 
-class MessageVueModele {
-  - {field} message : Message
-  - {field} estEnChargement : Bool
+enum TrancheAge {
+  18-25
+  25-35
+  36-45
+  46-55
+  56-65
+  66-75
+  76-...
 }
 
-class MessageVue {
-  - {field} vueModele : MessageVueModele
+enum JourSemaine {
+  Lundi
+  Mardi
+  Mercredi
+  Jeudi
+  Vendredi
+  Samedi
+  Dimanche
 }
-
-MessageVueModele "1" --* "1" Message
-MessageVue ..> MessageVueModele
-
 
 @enduml
