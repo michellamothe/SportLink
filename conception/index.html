@@ -562,6 +562,48 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Modèle de données">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#utilisateurs" class="md-nav__link">
+    <span class="md-ellipsis">
+      utilisateurs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evenements" class="md-nav__link">
+    <span class="md-ellipsis">
+      evenements
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discussions" class="md-nav__link">
+    <span class="md-ellipsis">
+      discussions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#indexation-recommandee" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔎 Indexation recommandée
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -707,6 +749,48 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Modèle de données">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#utilisateurs" class="md-nav__link">
+    <span class="md-ellipsis">
+      utilisateurs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evenements" class="md-nav__link">
+    <span class="md-ellipsis">
+      evenements
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discussions" class="md-nav__link">
+    <span class="md-ellipsis">
+      discussions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#indexation-recommandee" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔎 Indexation recommandée
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -750,18 +834,19 @@
 <p>Nous avons décidé de ne pas mettre les sous vues dans le diagramme, car nous pensons qu'il deviendrait trop grossier avec toutes les classes qui n'ont pas nécessairement d'attributs ou de méthodes pertinentes.
 <img alt="Diagramme de classe UML" src="../diagrams/out/SportLink.svg" title="Diagramme de classe UML" /></p>
 <h2 id="modele-de-donnees">Modèle de données<a class="headerlink" href="#modele-de-donnees" title="Permanent link">&para;</a></h2>
-<p>utilisateurs
+<h3 id="utilisateurs"><code>utilisateurs</code><a class="headerlink" href="#utilisateurs" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>utilisateurs
 ├── utilisateurId (doc ID)
-    ├── nomUtilisateur : "mimi123"
-    ├── courriel : "michel@example.com"
-    ├── motDePasseHash : "hashed_pw"
-    ├── photoProfil : "https://..."
+    ├── nomUtilisateur : &quot;mimi123&quot;
+    ├── courriel : &quot;michel@example.com&quot;
+    ├── motDePasseHash : &quot;hashed_pw&quot;
+    ├── photoProfil : &quot;https://...&quot;
     ├── disponibilites :
-    │   ├── lundi : ["AM", "PM"]
-    │   ├── mardi : ["AM"]
+    │   ├── lundi : [&quot;AM&quot;, &quot;PM&quot;]
+    │   ├── mardi : [&quot;AM&quot;]
     │   └── ...
-    ├── sportsFavoris : ["Soccer", "Tennis"]
-    ├── mode : "récréatif" | "compétitif"
+    ├── sportsFavoris : [&quot;Soccer&quot;, &quot;Tennis&quot;]
+    ├── mode : &quot;récréatif&quot; | &quot;compétitif&quot;
     ├── pointsParSport :
     │   ├── Soccer : 1200
     │   ├── Tennis : 800
@@ -773,44 +858,50 @@
     ├── evenementsFavoris : [eventId4]
     ├── partenairesRecents : [
     │     {
-    │       utilisateurId : "autreId",
-    │       sport : "Soccer",
+    │       utilisateurId : &quot;autreId&quot;,
+    │       sport : &quot;Soccer&quot;,
     │       activitesPartagees : 4,
-    │       dernierResultat : "+10"
+    │       dernierResultat : &quot;+10&quot;
     │     }
-    │   ]</p>
-<p>evenements
+    │   ]
+</code></pre></div>
+<h3 id="evenements"><code>evenements</code><a class="headerlink" href="#evenements" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>evenements
 ├── evenementId (doc ID)
-    ├── organisateurId : "utilisateurId"
-    ├── sport : "Basketball"
-    ├── date : "2025-06-12"
-    ├── heureDebut : "18:00"
-    ├── heureFin : "20:00"
+    ├── organisateurId : &quot;utilisateurId&quot;
+    ├── sport : &quot;Basketball&quot;
+    ├── date : &quot;2025-06-12&quot;
+    ├── heureDebut : &quot;18:00&quot;
+    ├── heureFin : &quot;20:00&quot;
     ├── lieu :
-    │   ├── nom : "Parc Jean-Drapeau"
+    │   ├── nom : &quot;Parc Jean-Drapeau&quot;
     │   ├── latitude : 45.508
     │   ├── longitude : -73.554
     ├── niveau : 2
     ├── maxParticipants : 6
     ├── participants : [utilisateurId1, utilisateurId2]
-    ├── statut : "ouvert" | "complet" | "annulé"
-    ├── discussionId : "chat123"</p>
-<p>discussions
+    ├── statut : &quot;ouvert&quot; | &quot;complet&quot; | &quot;annulé&quot;
+    ├── discussionId : &quot;chat123&quot;
+</code></pre></div>
+<h3 id="discussions"><code>discussions</code><a class="headerlink" href="#discussions" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>discussions
 ├── discussionId
-    ├── evenementId : "eventId"
+    ├── evenementId : &quot;eventId&quot;
     ├── participants : [utilisateurId1, utilisateurId2]
     ├── messages : [
     │     {
-    │       auteurId : "utilisateurId1",
-    │       contenu : "Salut !",
-    │       timestamp : "2025-05-31T12:10:00"
+    │       auteurId : &quot;utilisateurId1&quot;,
+    │       contenu : &quot;Salut !&quot;,
+    │       timestamp : &quot;2025-05-31T12:10:00&quot;
     │     }
-    │   ]</p>
+    │   ]
+</code></pre></div>
+<h3 id="indexation-recommandee">🔎 Indexation recommandée<a class="headerlink" href="#indexation-recommandee" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Filtre par sport : index sport</li>
-<li>Filtre par date : index date</li>
-<li>Filtre par niveau : index niveau (mode compétitif)</li>
-<li>Tri par distance : via géohash ou librairie comme geofirestore</li>
+<li>✅ <strong>Filtre par sport</strong> : <code>index sport</code></li>
+<li>✅ <strong>Filtre par date</strong> : <code>index date</code></li>
+<li>✅ <strong>Filtre par niveau</strong> (mode compétitif) : <code>index niveau</code></li>
+<li>✅ <strong>Tri par distance</strong> : via <em>geohash</em> ou librairie comme <code>geofirestore</code></li>
 </ul>
 <h2 id="prototype">Prototype<a class="headerlink" href="#prototype" title="Permanent link">&para;</a></h2>
 <p>La maquette Figma se trouve <a href="https://www.figma.com/design/N0QDEh5Shuht6eS3dpvKTB/SportLink?node-id=0-1&amp;t=CBkQlTjm84oNgfAk-1">ici</a>.</p>
