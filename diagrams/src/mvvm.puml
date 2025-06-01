@@ -1,13 +1,11 @@
 @startuml SportLink
 
 class Utilisateur {
+  - {field} id : UUID
   - {field} nomUtilisateur : String
-  - {field} prenom : String
-  - {field} nom : String
   - {field} courriel : String
   - {field} motDePasse : String
   - {field} dateDeNaissance : String
-  - {field} trancheAge : TrancheAge
   - {field} ville : String
   - {field} sportsFavoris : List<Sport>
   - {field} disponibilites : List<JourSemaine>
@@ -28,7 +26,7 @@ class ProfilUtilisateurVueModele {
   - {field} estEnChargement : Bool
   + {method} modifierMotDePasse(nouveauMotDePasse : String) : void
   + {method} chargerUtilisateur() : void
-  + {method} modifierProfil(trancheAge : TrancheAge, ville : String, sportsFavoris : List<Sport>, disponibilites : List<JourSemaine>, photoProfil : String) : void
+  + {method} modifierProfil(ville : String, sportsFavoris : List<Sport>, disponibilites : List<String>, photoProfil : String) : void
   + {method} changerPhotoProfil(nouvellePhoto : String) : void
 }
 
@@ -120,26 +118,6 @@ enum Sport {
 enum ModeUtilisateur {
   Recreatif
   Competitif
-}
-
-enum TrancheAge {
-  18-25
-  25-35
-  36-45
-  46-55
-  56-65
-  66-75
-  76-...
-}
-
-enum JourSemaine {
-  Lundi
-  Mardi
-  Mercredi
-  Jeudi
-  Vendredi
-  Samedi
-  Dimanche
 }
 
 @enduml
