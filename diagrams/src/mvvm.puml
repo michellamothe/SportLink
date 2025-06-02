@@ -6,27 +6,25 @@ class Utilisateur {
   - {field} courriel : String
   - {field} motDePasse : String
   - {field} dateDeNaissance : String
-  - {field} ville : String
   - {field} sportsFavoris : List<Sport>
-  - {field} disponibilites : List<JourSemaine>
+  - {field} disponibilites : List<String>
   - {field} photoProfil : String
-
-  + {method} ModeUtilisateur
 }
 
-class GestionUtilisateur {
+class Authentification {
     + inscrire(courriel : String, nomUtilisateur : String, motDePasse : String) : Bool
     + connecter(courriel : String, motDePasse : String) : Utilisateur
+    + oublierMotDePasse(courriel : String) : void
 }
 
-GestionUtilisateur --> Utilisateur : utilise
+Authentification --> Utilisateur : utilise
 
 class ProfilUtilisateurVueModele {
   - {field} utilisateur : Utilisateur
   - {field} estEnChargement : Bool
   + {method} modifierMotDePasse(nouveauMotDePasse : String) : void
   + {method} chargerUtilisateur() : void
-  + {method} modifierProfil(ville : String, sportsFavoris : List<Sport>, disponibilites : List<String>, photoProfil : String) : void
+  + {method} modifierProfil(sportsFavoris : List<Sport>, disponibilites : List<String>, photoProfil : String) : void
   + {method} changerPhotoProfil(nouvellePhoto : String) : void
 }
 
@@ -43,36 +41,34 @@ class Activite {
   - {field} intervalleDate : DateInterval 
   - {field} placesDisponibles : Integer
   - {field} niveau : Niveau
-  - {field} coordonnees : CLLocationCoordinate2D
+  - {field} emplacement : Emplacement
   - {field} messages : List<Message>
   - {field} mode : ModeUtilisateur
 }
 
 class ActiviteVueModele {
   - {field} activite : Activite
-  - {field} estEnChargement : Bool
+  - {field} utilisateur : Utilisateur
+  + {method} creerActiviteRecreative(date : Date, sport : Sport, places : Integer, debut : String, fin : String, lieu : String) : Activite
+  + {method} creerActiviteCompetitif(date : Date, sport : Sport, places : Integer, debut : String, fin : String, lieu : String, niveau : Niveau) : Activite
 }
 
 class ActiviteVue {
-  - {field} vueModele : ActiviteVueModele
+  - vueModele : ActiviteVueModele
 }
 
-ActiviteVueModele "1" --* "1" Activite
 ActiviteVue ..> ActiviteVueModele
+ActiviteVueModele --> Utilisateur : selon le mode
+ActiviteVueModele --> Activite : cree
 
-class CreationEvenementVueModele {
-  - utilisateur : Utilisateur
-  + {method} creerEvenement(date : Date, sport : Sport, places : Integer, debut : String, fin : String, lieu : String) : Activite
-  + {method} creerEvenementCompetitif(date : Date, sport : Sport, places : Integer, debut : String, fin : String, lieu : String, niveau : Niveau) : Activite
+class Emplacement {
+  - {field} nomEmplacement : String
+  - {field} coordonnees : CLLocationCoordinate2D
+  - {field} sportsDisponibles : List<String>
+  - {field} heuresOuvertures : String
+  - {field} activites : List<Activite>   
 }
-
-class CreationEvenementVue {
-  - vueModele : CreationEvenementVueModele
-}
-
-CreationEvenementVue ..> CreationEvenementVueModele
-CreationEvenementVueModele --> Utilisateur : selon le mode
-CreationEvenementVueModele --> Activite : crée
+'Demander à Louis pour la liste d'activités
 
 class Message {
   - {field} id : UUID
@@ -93,6 +89,23 @@ class MessageVue {
 
 MessageVueModele "1" --* "1" Message
 MessageVue ..> MessageVueModele
+
+
+class AccueilVueModele {
+
+}
+
+class ExplorerVueModele {
+
+}
+
+class CreerVueModele {
+
+}
+
+class ActivitesVueModele {
+
+}
 
 enum Niveau {
   Debutant

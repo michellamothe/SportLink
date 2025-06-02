@@ -583,15 +583,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#discussions" class="md-nav__link">
-    <span class="md-ellipsis">
-      discussions
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -761,15 +752,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#discussions" class="md-nav__link">
-    <span class="md-ellipsis">
-      discussions
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -827,7 +809,7 @@
 |   |   ├── Vues/
 |   |   ├── VuesModeles/
 |   |   └── Sousvues/
-│   └── Profile/
+│   └── Profil/
 |       ├── Vues/
 |       ├── VuesModeles/
 |       └── Sousvues/
@@ -835,7 +817,7 @@
 ├── ModelesPartagees/
 |   ├── Utilisateur.swift
 |   ├── Activite.swift
-|   ├── Discussion.swift
+|   ├── Message.swift
 |   └── Emplacement.swift
 |
 ├── ComposantesUI/
@@ -927,12 +909,6 @@
     ├── participants : [utilisateurId1, utilisateurId2]
     ├── statut : &quot;ouvert&quot; | &quot;complet&quot; | &quot;annule&quot;
     ├── discussionId : &quot;chat123&quot;
-</code></pre></div>
-<h3 id="discussions"><code>discussions</code><a class="headerlink" href="#discussions" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>discussions
-├── discussionId
-    ├── activiteId : &quot;activiteId&quot;
-    ├── participants : [utilisateurId1, utilisateurId2]
     ├── messages : [
     │     {
     │       auteurId : &quot;utilisateurId1&quot;,
