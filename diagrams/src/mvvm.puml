@@ -1,124 +1,129 @@
 @startuml SportLink
 
 class Utilisateur {
-  - {field} id : UUID
-  - {field} nomUtilisateur : String
-  - {field} courriel : String
-  - {field} motDePasse : String
-  - {field} dateDeNaissance : String
-  - {field} sportsFavoris : List<Sport>
-  - {field} disponibilites : List<String>
-  - {field} photoProfil : String
+  - id : UUID
+  - nomUtilisateur : String
+  - courriel : String
+  - sportsFavoris : List<Sport>
+  - disponibilites : List<String>
+  - photoProfil : String
 }
-
-class Authentification {
-    + inscrire(courriel : String, nomUtilisateur : String, motDePasse : String) : Bool
+class AuthVueModele {
+    - courriel : String
+    - motDePasse : String
+    - estEnChargement : Boolean
+    + inscrire(courriel : String, nomUtilisateur : String, motDePasse : String) : Boolean
     + connecter(courriel : String, motDePasse : String) : Utilisateur
-    + oublierMotDePasse(courriel : String) : void
+    + mettreAJourMDP(courriel : String) : void
 }
-
-Authentification --> Utilisateur : utilise
-
 class ProfilUtilisateurVueModele {
-  - {field} utilisateur : Utilisateur
-  - {field} estEnChargement : Bool
-  + {method} modifierMotDePasse(nouveauMotDePasse : String) : void
-  + {method} chargerUtilisateur() : void
-  + {method} modifierProfil(sportsFavoris : List<Sport>, disponibilites : List<String>, photoProfil : String) : void
-  + {method} changerPhotoProfil(nouvellePhoto : String) : void
+  - utilisateur : Utilisateur
+  - estEnChargement : Boolean
+  + modifierMotDePasse(nouveauMotDePasse : String) : void
+  + chargerUtilisateur() : void
+  + modifierProfil(sportsFavoris : List<Sport>, disponibilites : List<String>, photoProfil : String) : void
+  + changerPhotoProfil(nouvellePhoto : String) : void
 }
+AuthVueModele --> Utilisateur
+ProfilUtilisateurVueModele --* Utilisateur
 
-class ProfilUtilisateurVue {
-  - {field} vueModele : ProfilUtilisateurVueModele
+'------------------------------------------------------'
+'---------------------- ACTIVITE ----------------------'
+'------------------------------------------------------'
+abstract class Activite {
+  - id : UUID
+  - sport : Sport
+  - intervalleDate : DateInterval
+  - placesDisponibles : Integer
+  - niveau : Niveau
+  - emplacement : Emplacement
+  - messages : List<Message>
 }
-
-ProfilUtilisateurVueModele "1" --* "1" Utilisateur
-ProfilUtilisateurVue ..> ProfilUtilisateurVueModele
-
-class Activite {
-  - {field} id : UUID
-  - {field} sport : Sport
-  - {field} intervalleDate : DateInterval 
-  - {field} placesDisponibles : Integer
-  - {field} niveau : Niveau
-  - {field} emplacement : Emplacement
-  - {field} messages : List<Message>
-  - {field} mode : ModeUtilisateur
+class ActiviteCompetitif {
+  - notesAttribuees : Dict<Utilisateur, Dict<Utilisateur, String>>
 }
-
-class ActiviteVueModele {
-  - {field} activite : Activite
-  - {field} utilisateur : Utilisateur
-  + {method} creerActiviteRecreative(date : Date, sport : Sport, places : Integer, debut : String, fin : String, lieu : String) : Activite
-  + {method} creerActiviteCompetitif(date : Date, sport : Sport, places : Integer, debut : String, fin : String, lieu : String, niveau : Niveau) : Activite
+class ActiviteRecreatif {
+  - invitationsOuvertes : Boolean
 }
-
-class ActiviteVue {
-  - vueModele : ActiviteVueModele
+class CreationActiviteVueModele {
+  - activite : Activite
+  - estEnChargement : Boolean
+  + creerActivite(mode : ModeUtilisateur, date : Date, sport : Sport, places : Integer, debut : String, fin : String, lieu : String, niveau? : Niveau) : Task<Activite>
 }
+class DetailActiviteVueModele {
+  - activite       : Activite
+  - estEnChargement      : Boolean
+  + participer() : Task<Utilisateur>
+  + supprimerActivite() : Task<Void>
+  + annulerParticipation() : Task<Void>
+  + modifierActivite(nouvellesInfos: Activite) : Task<Activite>
+}
+DetailActiviteVueModele --> Activite
+CreationActiviteVueModele --> Utilisateur
+CreationActiviteVueModele --> Activite
+Activite <|-- ActiviteCompetitif
+Activite <|-- ActiviteRecreatif
 
-ActiviteVue ..> ActiviteVueModele
-ActiviteVueModele --> Utilisateur : selon le mode
-ActiviteVueModele --> Activite : cree
-
+'------------------------------------------------------'
+'--------------------- EMPLACEMENT --------------------'
+'------------------------------------------------------'
 class Emplacement {
-  - {field} nomEmplacement : String
-  - {field} coordonnees : CLLocationCoordinate2D
-  - {field} sportsDisponibles : List<String>
-  - {field} heuresOuvertures : String
-  - {field} activites : List<Activite>   
+  - nomEmplacement : String
+  - coordonnees : CLLocationCoordinate2D
+  - sportsDisponibles : List<String>
+  - heuresOuvertures : String 
 }
-'Demander à Louis pour la liste d'activités
+Activite o-- Emplacement
+Activite *-- Message
 
+'------------------------------------------------------'
+'---------------------- MESSAGE -----------------------'
+'------------------------------------------------------'
 class Message {
-  - {field} id : UUID
-  - {field} contenu : String
-  - {field} envoyeA : Date
-  - {field} expediteur : Utilisateur
-  - {field} idActivite : UUID
+  - id : UUID
+  - contenu : String
+  - envoyeA : Date
+  - expediteur : Utilisateur
 }
-
-class MessageVueModele {
-  - {field} message : Message
-  - {field} estEnChargement : Bool
+class ConversationVueModele {
+  - activite : Activite
+  - messages : List<Message>
+  - estEnChargement : Boolean
+  + obtenirMessages() : Task<List<Message>>
+  + envoyerMessage(texte: String) : Task<Message>
 }
+ConversationVueModele --* Message
 
-class MessageVue {
-  - {field} vueModele : MessageVueModele
+'------------------------------------------------------'
+'-------------------- STATISTIQUE ---------------------'
+'------------------------------------------------------'
+class Statistique {
+  - sport : Sport
+  - partiesJouees : Integer
+  - gagnees : Integer
+  - perdues : Integer
+  - dernierResultat : Integer
 }
-
-MessageVueModele "1" --* "1" Message
-MessageVue ..> MessageVueModele
-
-
-class AccueilVueModele {
-
+class StatsVueModele {
+  - stats : List<Statistique>
+  + obtenirStats(idUtilisateur: UUID) : Task<List<Statistique>>
 }
+StatsVueModele --> Statistique
+StatsVueModele --> Utilisateur
 
-class ExplorerVueModele {
 
-}
-
-class CreerVueModele {
-
-}
-
-class ActivitesVueModele {
-
-}
-
+'-------------------- ENUM --------------------'
 enum Niveau {
   Debutant
   Intermediaire
   Avance
 }
-
 enum Sport {
   Basketball
   Soccer
   Volleyball
   Baseball
-  Tennis
+  Tennis 
   Badminton
   Pickleball
   Waterpolo
@@ -127,9 +132,8 @@ enum Sport {
   Ultimate
   Hockey
 }
-
 enum ModeUtilisateur {
-  Recreatif
+  Recreatif 
   Competitif
 }
 
