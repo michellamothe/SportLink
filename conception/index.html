@@ -583,6 +583,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#emplacements" class="md-nav__link">
+    <span class="md-ellipsis">
+      emplacements
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -752,6 +761,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#emplacements" class="md-nav__link">
+    <span class="md-ellipsis">
+      emplacements
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -861,48 +879,44 @@
 <p>Nous avons décidé de ne pas mettre les sous vues dans le diagramme, car nous pensons qu'il deviendrait trop grossier avec toutes les classes qui n'ont pas nécessairement d'attributs ou de méthodes pertinentes.
 <img alt="Diagramme de classe UML" src="../diagrams/out/SportLink.svg" title="Diagramme de classe UML" /></p>
 <h2 id="modele-de-donnees">Modèle de données<a class="headerlink" href="#modele-de-donnees" title="Permanent link">&para;</a></h2>
+<p>Voici le modèle de données style NoSQL qui réflète les <em>entités métiers</em>. C'est ainsi que les données seront stockées dans Firebase.</p>
 <h3 id="utilisateurs"><code>utilisateurs</code><a class="headerlink" href="#utilisateurs" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>utilisateurs
-├── utilisateurId
-    ├── nomUtilisateur : &quot;mimi123&quot;
-    ├── courriel : &quot;michel@example.com&quot;
-    ├── motDePasseHash : &quot;hashed_pw&quot;
-    ├── photoProfil : &quot;https://...&quot;
-    ├── disponibilites :
-    │   ├── lundi : [&quot;AM&quot;, &quot;PM&quot;]
-    │   ├── mardi : [&quot;AM&quot;]
-    │   └── ...
-    ├── sportsFavoris : [&quot;Soccer&quot;, &quot;Tennis&quot;]
-    ├── mode : &quot;recreatif&quot; | &quot;competitif&quot;
-    ├── pointsTotauxParSport :
-    │   ├── Soccer : 1200
-    │   ├── Tennis : 800
-    ├── activitesFavoris : [eventId4]
-    ├── partenairesRecents : [
-    │     {
-    │       utilisateurId : &quot;autreId&quot;,
-    │       sport : &quot;Soccer&quot;,
-    │       dernierResultat : &quot;+10&quot;
-    │     }
+<div class="highlight"><pre><span></span><code>utilisateurs    (collection)
+└── {utilisateurId}
+    ├── nomUtilisateur        : &quot;mimi123&quot;
+    ├── courriel              : &quot;michel@example.com&quot;
+    ├── photoProfil           : &quot;https://...&quot;
+    ├── disponibilites        : [&quot;lundi_AM&quot;, &quot;lundi_PM&quot;, &quot;mardi_AM&quot;] 
+    ├── sportsFavoris         : [&quot;Soccer&quot;, &quot;Tennis&quot;]                  
+    ├── mode                  : &quot;Recreatif&quot; | &quot;Competitif&quot;         
+    ├── favorisActivites      : [&quot;eventId4&quot;,&quot;eventId9&quot;]              
+    ├── partenairesRecents    : [                                    
+    │     { utilisateurId: &quot;autreId&quot;,
+    │       sport: &quot;Soccer&quot;,
+    │       dernierResultat: +10 }
     │   ]
+    └── stats   (sous-collection)
+         └── {sport}                
+             ├── partiesJouees   : 30
+             ├── gagnees         : 18
+             ├── perdues         : 12
+             └── dernierResultat : +10
 </code></pre></div>
 <h3 id="activites"><code>activites</code><a class="headerlink" href="#activites" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code>activites
 ├── activiteId
     ├── organisateurId : &quot;utilisateurId&quot;
     ├── sport : &quot;Basketball&quot;
-    ├── date : &quot;2025-06-12&quot;
-    ├── heureDebut : &quot;18:00&quot;
-    ├── heureFin : &quot;20:00&quot;
+    ├── date : &quot;2025-06-12T17:00&quot;
+    ├── duree : &quot;02:00&quot;
     ├── lieu :
     │   ├── nom : &quot;Parc Jean-Drapeau&quot;
     │   ├── latitude : 45.508
     │   ├── longitude : -73.554
-    ├── niveau : 2
+    ├── niveau : &quot;debutant&quot; | &quot;intermediaire&quot; | &quot;avance&quot;
     ├── maxParticipants : 6
     ├── participants : [utilisateurId1, utilisateurId2]
     ├── statut : &quot;ouvert&quot; | &quot;complet&quot; | &quot;annule&quot;
-    ├── discussionId : &quot;chat123&quot;
     ├── messages : [
     │     {
     │       auteurId : &quot;utilisateurId1&quot;,
@@ -911,6 +925,14 @@
     │     }
     │   ]
 </code></pre></div>
+<h3 id="emplacements"><code>emplacements</code><a class="headerlink" href="#emplacements" title="Permanent link">&para;</a></h3>
+<p>emplacements
+└── {emplacementId}
+    ├── nomEmplacement    : "Parc Jean-Drapeau"
+    ├── latitude          : 45.508
+    ├── longitude         : -73.554
+    ├── sportsDisponibles : ["Basketball", "Soccer"]
+    └── heuresOuvertures  : "08:00-22:00"</p>
 <h2 id="prototype">Prototype<a class="headerlink" href="#prototype" title="Permanent link">&para;</a></h2>
 <p>La maquette Figma se trouve <a href="https://www.figma.com/design/N0QDEh5Shuht6eS3dpvKTB/SportLink?node-id=0-1&amp;t=CBkQlTjm84oNgfAk-1">ici</a>.</p>
 

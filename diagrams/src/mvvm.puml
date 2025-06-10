@@ -37,6 +37,7 @@ abstract class Activite {
   - placesDisponibles : Integer
   - niveau : Niveau
   - emplacement : Emplacement
+  - complet : Boolean
   - messages : List<Message>
 }
 class ActiviteCompetitif {
