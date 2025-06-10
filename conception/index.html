@@ -903,8 +903,9 @@
              └── dernierResultat : +10
 </code></pre></div>
 <h3 id="activites"><code>activites</code><a class="headerlink" href="#activites" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>activites
-├── activiteId
+<div class="highlight"><pre><span></span><code>activites    (collection)
+├── {activiteId}
+    ├── type : &quot;competitif&quot; | &quot;recreatif&quot;
     ├── organisateurId : &quot;utilisateurId&quot;
     ├── sport : &quot;Basketball&quot;
     ├── date : &quot;2025-06-12T17:00&quot;
@@ -917,6 +918,11 @@
     ├── maxParticipants : 6
     ├── participants : [utilisateurId1, utilisateurId2]
     ├── statut : &quot;ouvert&quot; | &quot;complet&quot; | &quot;annule&quot;
+    ├── emplacement : emplacementId
+    ├── invitationsOuvertes : true        # ActiviteRecreatif
+    ├── notesAttribuees     : {           # ActiviteCompetitif
+    │     &quot;uId1&quot;: { &quot;uId2&quot;: &quot;👍&quot;, &quot;uId3&quot;: &quot;👎&quot; }
+    │   }
     ├── messages : [
     │     {
     │       auteurId : &quot;utilisateurId1&quot;,
@@ -926,7 +932,7 @@
     │   ]
 </code></pre></div>
 <h3 id="emplacements"><code>emplacements</code><a class="headerlink" href="#emplacements" title="Permanent link">&para;</a></h3>
-<p>emplacements
+<p>emplacements    (collection)
 └── {emplacementId}
     ├── nomEmplacement    : "Parc Jean-Drapeau"
     ├── latitude          : 45.508
