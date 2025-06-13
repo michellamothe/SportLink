@@ -35,21 +35,15 @@ abstract class Activite {
   - sport : Sport
   - intervalleDate : DateInterval
   - placesDisponibles : Integer
-  - niveau : Niveau
   - emplacement : Emplacement
   - complet : Boolean
   - messages : List<Message>
-}
-class ActiviteCompetitif {
-  - notesAttribuees : Dict<Utilisateur, Dict<Utilisateur, String>>
-}
-class ActiviteRecreatif {
   - invitationsOuvertes : Boolean
 }
 class CreationActiviteVueModele {
   - activite : Activite
   - estEnChargement : Boolean
-  + creerActivite(mode : ModeUtilisateur, date : Date, sport : Sport, places : Integer, debut : String, fin : String, lieu : String, niveau? : Niveau) : Task<Activite>
+  + creerActivite(mode : ModeUtilisateur, date : Date, sport : Sport, places : Integer, debut : String, fin : String, lieu : String) : Task<Activite>
 }
 class DetailActiviteVueModele {
   - activite       : Activite
@@ -62,8 +56,6 @@ class DetailActiviteVueModele {
 DetailActiviteVueModele --> Activite
 CreationActiviteVueModele --> Utilisateur
 CreationActiviteVueModele --> Activite
-Activite <|-- ActiviteCompetitif
-Activite <|-- ActiviteRecreatif
 
 '------------------------------------------------------'
 '--------------------- EMPLACEMENT --------------------'
@@ -95,30 +87,8 @@ class ConversationVueModele {
 }
 ConversationVueModele --* Message
 
-'------------------------------------------------------'
-'-------------------- STATISTIQUE ---------------------'
-'------------------------------------------------------'
-class Statistique {
-  - sport : Sport
-  - partiesJouees : Integer
-  - gagnees : Integer
-  - perdues : Integer
-  - dernierResultat : Integer
-}
-class StatsVueModele {
-  - stats : List<Statistique>
-  + obtenirStats(idUtilisateur: UUID) : Task<List<Statistique>>
-}
-StatsVueModele --> Statistique
-StatsVueModele --> Utilisateur
-
 
 '-------------------- ENUM --------------------'
-enum Niveau {
-  Debutant
-  Intermediaire
-  Avance
-}
 enum Sport {
   Basketball
   Soccer
@@ -132,10 +102,6 @@ enum Sport {
   Rugby
   Ultimate
   Hockey
-}
-enum ModeUtilisateur {
-  Recreatif 
-  Competitif
 }
 
 @enduml

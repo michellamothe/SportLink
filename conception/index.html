@@ -905,42 +905,26 @@
     ├── courriel              : &quot;michel@example.com&quot;
     ├── photoProfil           : &quot;https://...&quot;
     ├── disponibilites        : [&quot;lundi_AM&quot;, &quot;lundi_PM&quot;, &quot;mardi_AM&quot;] 
-    ├── sportsFavoris         : [&quot;Soccer&quot;, &quot;Tennis&quot;]                  
-    ├── mode                  : &quot;Recreatif&quot; | &quot;Competitif&quot;         
+    ├── sportsFavoris         : [&quot;Soccer&quot;, &quot;Tennis&quot;]                         
     ├── favorisActivites      : [&quot;eventId4&quot;,&quot;eventId9&quot;]              
-    ├── partenairesRecents    : [                                    
+    └── partenairesRecents    : [                                    
     │     { utilisateurId: &quot;autreId&quot;,
     │       sport: &quot;Soccer&quot;,
     │       dernierResultat: +10 }
     │   ]
-    └── stats   (sous-collection)
-         └── {sport}                
-             ├── partiesJouees   : 30
-             ├── gagnees         : 18
-             ├── perdues         : 12
-             └── dernierResultat : +10
 </code></pre></div>
 <h3 id="activites"><code>activites</code><a class="headerlink" href="#activites" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code>activites    (collection)
 ├── {activiteId}
-    ├── type : &quot;competitif&quot; | &quot;recreatif&quot;
     ├── organisateurId : &quot;utilisateurId&quot;
     ├── sport : &quot;Basketball&quot;
     ├── date : &quot;2025-06-12T17:00&quot;
     ├── duree : &quot;02:00&quot;
-    ├── lieu :
-    │   ├── nom : &quot;Parc Jean-Drapeau&quot;
-    │   ├── latitude : 45.508
-    │   ├── longitude : -73.554
-    ├── niveau : &quot;debutant&quot; | &quot;intermediaire&quot; | &quot;avance&quot;
-    ├── maxParticipants : 6
+    ├── nbJoueursRecherches : 6
     ├── participants : [utilisateurId1, utilisateurId2]
     ├── statut : &quot;ouvert&quot; | &quot;complet&quot; | &quot;annule&quot;
     ├── emplacement : emplacementId
-    ├── invitationsOuvertes : true        # ActiviteRecreatif
-    ├── notesAttribuees     : {           # ActiviteCompetitif
-    │     &quot;uId1&quot;: { &quot;uId2&quot;: &quot;👍&quot;, &quot;uId3&quot;: &quot;👎&quot; }
-    │   }
+    ├── invitationsOuvertes : true 
     └── messages : [messageId1, messagesId2, ...]
 </code></pre></div>
 <h3 id="messages"><code>messages</code><a class="headerlink" href="#messages" title="Permanent link">&para;</a></h3>
