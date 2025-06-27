@@ -1110,32 +1110,36 @@
 <details class="note">
 <summary>Étapes faites</summary>
 <ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Participation à la foire et collecte des commentaires et critiques</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Ajustement du modèle de données</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Finalisation du diagramme UML</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Conception de la vue de la page <em>Explorer</em>.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Conception de la vue de la page <em>Création d’événement</em>.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Début de l'implémentation des pointeurs (parc et sport)</li>
 </ul>
 </details>
 <div class="admonition info">
 <p class="admonition-title">Notes</p>
 <ul>
-<li>Plusieurs interrogations ont été soulevées par les pairs, et plusieurs critiques ont été retenues pour orienter la suite du projet :<ul>
-<li>La complexité entourant le mode compétitif nous a amenés à conclure qu’il est préférable de ne pas le développer davantage. Seul le mode récréatif sera conservé.</li>
-</ul>
-</li>
+<li>À discuter : Dans la carte de création d'évènement, il sera probalemment préférable d'ajouter une barre de recherche pour pour faire une recherche par le nom d'un parc ou une adresse. Cela pourra probalblement faciliter la recherche tout en gardant la fonctionnalité de la carte implémenté dans le mode <em>Explorer</em></li>
 </ul>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Difficultés rencontrées</p>
 <ul>
-<li>Nombreux questionnements autour des pointeurs sur la carte, notamment en ce qui concerne leur fonctionnement, leur précision et leur nombre en fonction du niveau de zoom.</li>
-<li>Réflexion sur l’abandon du mode compétitif : devons-nous conserver un certain système de pointage même en mode récréatif ?</li>
+<li>Les marqueurs personnalisés sont très difficile à implémenter pour plusieurs raisons :<ul>
+<li>Plus lours à gérer visuellement (scaling, animation)</li>
+<li>Demande beaucoup de ressources</li>
+<li>Difficlie à mettre à jour en temps réel</li>
+</ul>
+</li>
+<li>API de la ville de Montréal ne marche pas, nous devons dont avoir recours aux fichier rae JSON</li>
 </ul>
 </div>
 <div class="admonition abstract">
 <p class="admonition-title">Prochaines étapes</p>
 <ul>
-<li>Début de la conception de l’application dans Xcode.</li>
-<li>Tests d’intégration avec la base de données Firebase</li>
+<li>Débuter certain fonctionnalité de la création d'évènement, comme pourvoir les stocker dans le Firebase. Faire fonctionné la carte</li>
+<li>Faire la version liste de la page Explore</li>
+<li>Faire le mode vue de la page <em>Home</em></li>
+<li>Faire le mode vue de la page <em>Profil</em></li>
 </ul>
 </div>
 <h2 id="semaine-9-29-juin-5-juillet">Semaine 9 (29 juin - 5 juillet)<a class="headerlink" href="#semaine-9-29-juin-5-juillet" title="Permanent link">&para;</a></h2>
