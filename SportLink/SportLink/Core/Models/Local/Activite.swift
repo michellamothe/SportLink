@@ -46,8 +46,15 @@ struct PlageHoraire: Codable {
         DateInterval(start: debut, end: fin)
     }
 
-    var affichage: String {
+    var affichage: (String, String, String) {
         struct Format {
+            static let date: DateFormatter = {
+                let f = DateFormatter()
+                f.locale = Locale(identifier: "en_US_POSIX")
+                f.dateFormat = "MMM d"
+                return f
+            }()
+            
             static let temps: DateFormatter = {
                 let f = DateFormatter()
                 f.locale = Locale(identifier: "en_US_POSIX")
@@ -56,9 +63,10 @@ struct PlageHoraire: Codable {
             }()
         }
 
+        let dateStr = Format.date.string(from: debut)
         let debutStr = Format.temps.string(from: debut)
-        let finStr   = Format.temps.string(from: fin)
-        return "\(debutStr) - \(finStr)"
+        let finStr = Format.temps.string(from: fin)
+        return (dateStr, debutStr, finStr)
     }
 }
 

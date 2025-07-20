@@ -28,6 +28,10 @@ struct ApplicationSportLink: App {
     
     var body: some Scene {
         WindowGroup {
+            /*TestParentView(serviceEmplacements: emplacementsVM)
+                .onAppear {
+                    emplacementsVM.chargerDonnees()
+                }*/
             VuePrincipale(serviceEmplacements: emplacementsVM)
                 .environmentObject(emplacementsVM)
                 .onAppear {

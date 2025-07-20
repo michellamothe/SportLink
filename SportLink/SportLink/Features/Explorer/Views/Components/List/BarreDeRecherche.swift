@@ -26,8 +26,7 @@ struct BarreDeRecherche: View {
                 .simultaneousGesture(
                     TapGesture().onEnded {
                         if afficherFiltreOverlay {
-                            
-                            afficherFiltreOverlay = false
+                            withAnimation { afficherFiltreOverlay = false }
                         }
                     }
                 )

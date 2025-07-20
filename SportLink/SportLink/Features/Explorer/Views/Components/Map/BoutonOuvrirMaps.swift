@@ -9,19 +9,18 @@ import SwiftUI
 import MapKit
 
 struct BoutonOuvrirMaps: View {
-    @StateObject var recherchePOI = RecherchePOIVM()
-    @State private var afficherConfirmation = false
-    @State private var itemMaps: MKMapItem? = nil
-    var parc: Parc
+    @Binding var afficherConfirmation: Bool
+    @Binding var itemMap: MKMapItem?
+    var texte: String
+    let fetchItemMap: (@escaping (MKMapItem?) -> Void) -> Void
+    var optionsLancement: [String: Any]?
     
     var body: some View {
         Button {
-            recherchePOI.ouvrirParcDansMaps(for: parc) { item in
+            fetchItemMap { item in
                 if let item = item {
-                    itemMaps = item
+                    itemMap = item
                     afficherConfirmation = true
-                } else {
-                    print("Aucun parc trouvé.")
                 }
             }
         } label: {
@@ -30,24 +29,38 @@ struct BoutonOuvrirMaps: View {
         .alert("Opening in Apple Maps", isPresented: $afficherConfirmation, actions: {
             Button("Close", role: .cancel) { }
             Button("Open") {
-                itemMaps?.openInMaps()
+                if let opts = optionsLancement {
+                    itemMap?.openInMaps(launchOptions: opts)
+                } else {
+                    itemMap?.openInMaps()
+                }
             }
         }, message: {
-            Text("Do you really want to open the location of the parc in Apple Maps?")
+            Text("Do you really want to open the \(texte) in Apple Maps?")
         })
     }
 }
 
-#Preview {
-    PreviewContent.recherchePOIVue
-}
-
-private struct PreviewContent {
-    static var recherchePOIVue: some View {
-        let vm = DonneesEmplacementService()
-        vm.chargerDonnees()
-        return BoutonOuvrirMaps(
-            parc: vm.parcs.first { $0.nom == "Rutherford" }!
+private struct BoutonOuvrirMaps_Previews: PreviewProvider {
+    static let mockItem: MKMapItem = {
+        let placemark = MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: 48.8566, longitude: 2.3522))
+        let item = MKMapItem(placemark: placemark)
+        item.name = "Mock Parc"
+        return item
+    }()
+    
+    static var previews: some View {
+        BoutonOuvrirMaps(
+            afficherConfirmation: .constant(true),
+            itemMap: .constant(mockItem),
+            texte: "parc",
+            fetchItemMap: { completion in
+                // Simule la récupération du MKMapItem
+                completion(mockItem)
+            },
+            optionsLancement: nil
         )
+        .previewDisplayName("Ouvre un parc")
+        .padding()
     }
 }

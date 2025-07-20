@@ -17,6 +17,8 @@ struct AccueilVue: View {
         }
         .navigationTitle("Home")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(Color(.systemGray6))
+        .toolbarBackgroundVisibility(.visible, for: .navigationBar)
     }
 }
 

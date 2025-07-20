@@ -34,4 +34,12 @@ class RecherchePOIVM: ObservableObject {
             completion(item)
         }
     }
+    
+    
+    func ouvrirRouteDansMaps(coordonneesDestination: CLLocationCoordinate2D, nomSport: String, completion: @escaping (MKMapItem?) -> Void) {
+        let repereDestination = MKPlacemark(coordinate: coordonneesDestination)
+        let itemMapDestination = MKMapItem(placemark: repereDestination)
+        itemMapDestination.name = "\(nomSport.capitalized) infrastructure"
+        completion(itemMapDestination)
+    }
 }

@@ -50,6 +50,11 @@ struct RangeeActivite: View {
         return String(format: "%d spots left", diff)
     }
     
+    private var composantesDate: String {
+        let (_, tempsDebut, tempsFin) = activite.date.affichage
+        return "\(tempsDebut) - \(tempsFin)"
+    }
+    
     var body: some View {
         VStack {
             VStack(alignment: .leading, spacing: 12) {
@@ -150,7 +155,7 @@ struct RangeeActivite: View {
                                         .fontWeight(.light)
                                         .foregroundStyle(Color(.systemGray))
                                     
-                                    Text(activite.date.affichage)
+                                    Text(composantesDate)
                                         .fontWeight(.medium)
                                 }
                             }
@@ -194,8 +199,8 @@ struct RangeeActivite: View {
         .frame(maxWidth: .infinity)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color(.systemBackground))
-                .shadow(color: Color.black.opacity(0.15), radius: 2, x: 0, y: 1)
+                .fill(Color.white)
+                .shadow(color: Color.black.opacity(0.15), radius: 2)
         )
         .contentShape(Rectangle())
     }

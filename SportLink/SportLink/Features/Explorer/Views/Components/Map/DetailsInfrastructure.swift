@@ -9,8 +9,11 @@ import SwiftUI
 import MapKit
 
 struct DetailsInfrastructure: View {
+    @StateObject var recherchePOI = RecherchePOIVM()
     @StateObject var serviceActivites = ServiceActivites()
-    @State var estEnChargement: Bool = true
+    @State private var estEnChargement: Bool = true
+    @State private var afficherConfirmationParc = false
+    @State private var itemParcMap: MKMapItem?
     @Binding var utilisateur: Utilisateur
     @Binding var dateSelectionnee: Date
     var infra: Infrastructure
@@ -55,8 +58,18 @@ struct DetailsInfrastructure: View {
                 
                 Spacer()
                 
-                BoutonOuvrirMaps(parc: parcParent)
-                    .scaleEffect(0.8, anchor: .trailing)
+                BoutonOuvrirMaps(
+                    afficherConfirmation: $afficherConfirmationParc,
+                    itemMap: $itemParcMap,
+                    texte: "location of the parc",
+                    fetchItemMap: { completion in
+                        recherchePOI.ouvrirParcDansMaps(for: parcParent) { item in
+                            completion(item)
+                        }
+                    },
+                    optionsLancement: nil
+                )
+                .scaleEffect(0.8, anchor: .trailing)
             }
             
             Divider()

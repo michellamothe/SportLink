@@ -8,12 +8,18 @@ enum Onglets: Int {
 struct VuePrincipale: View {
     @EnvironmentObject var serviceEmplacements: DonneesEmplacementService
     @StateObject private var activitesVM: ActivitesVM
+    @StateObject private var activitesOrganiseesVM: ActivitesOrganiseesVM
     @State private var ongletSelectionne: Onglets = .accueil
     @State private var estPresente = false
     @State private var afficherTabBar = true
     
+    @Namespace var namespace
+    @State private var activiteSelectionnee: Activite? = nil
+    @State private var animationEnCours = false
+    
     init(serviceEmplacements: DonneesEmplacementService) {
         self._activitesVM = StateObject(wrappedValue: ActivitesVM(serviceEmplacements: serviceEmplacements))
+        self._activitesOrganiseesVM = StateObject(wrappedValue: ActivitesOrganiseesVM(serviceActivites: ServiceActivites(), serviceEmplacements: serviceEmplacements))
     }
 
     var body: some View {
@@ -24,15 +30,26 @@ struct VuePrincipale: View {
                     case .accueil:
                         AccueilVue()
                     case .explorer:
-                        ExplorerVue(utilisateur: .constant(mockUtilisateur))
-                            .environmentObject(serviceEmplacements)
-                            .environmentObject(activitesVM)
+                        ExplorerVue(
+                            namespace: namespace,
+                            activiteSelectionnee: $activiteSelectionnee,
+                            animationEnCours: $animationEnCours,
+                            utilisateur: .constant(mockUtilisateur)
+                        )
+                        .environmentObject(serviceEmplacements)
+                        .environmentObject(activitesVM)
+                        .environmentObject(activitesOrganiseesVM)
                     case .creer:
                         Color.clear // ne sera jamais directement visible
                     case .activites:
-                        ActivitesVue()
-                            .environmentObject(serviceEmplacements)
-                            .environmentObject(activitesVM)
+                        ActivitesVue(
+                            namespace: namespace,
+                            activiteSelectionnee: $activiteSelectionnee,
+                            animationEnCours: $animationEnCours,
+                        )
+                        .environmentObject(serviceEmplacements)
+                        .environmentObject(activitesVM)
+                        .environmentObject(activitesOrganiseesVM)
                     case .profil:
                         ProfilVue()
                     }
@@ -43,6 +60,18 @@ struct VuePrincipale: View {
                     ongletSelectionnee: $ongletSelectionne,
                     estPresente: $estPresente
                 )
+                
+                if let activite = activiteSelectionnee {
+                    TestCardView(
+                        namespace: namespace,
+                        activite: activite,
+                        activiteSelectionnee: $activiteSelectionnee,
+                        animationEnCours: $animationEnCours
+                    )
+                    .environmentObject(activitesOrganiseesVM)
+                    .environmentObject(activitesVM)
+                    .zIndex(1)
+                }
             }
             .ignoresSafeArea(.keyboard, edges: .bottom)
             .fullScreenCover(isPresented: $estPresente) {
