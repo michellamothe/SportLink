@@ -1179,30 +1179,32 @@
 <details class="note">
 <summary>Étapes faites</summary>
 <ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Finalisation du mode <em>Carte</em> de la vue <em>Explorer</em>.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Finalisation de la vue <em>Créer évènement</em>.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Test d'une première implémentation de la création d'évènement avec la base de données <em>Firebase</em>.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> La vue de la page <em>Activités</em> est terminée</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Une logique de vérification a été trouvé pour s'assurer qu'un même évènement ne puisse pas être créé pour un même créneau horaire, au même endroit et sur la même infrastructure.</li>
 </ul>
 </details>
 <div class="admonition info">
 <p class="admonition-title">Notes</p>
 <ul>
-<li>Nous avons réussi à implémenter une carte intelligente qui filtre dynamiquement les infrastructures lors de la création d’un évènement. Lorsqu’un sport est sélectionné, seuls les pointeurs correspondant aux parcs offrant les infrastructures pour ce sport sont affichés sur la carte.</li>
-<li>La page <em>Home</em> sera réalisée en dernier.</li>
-<li>La page <em>Profil</em> n’est pas encore prioritaire.</li>
+<li>La vue <em>Activités</em> doit être dveloppé pour intégrer une vue de modification pour les activité organisée</li>
+<li>L’affichage des activités auxquelles l’utilisateur participe ou enregistre reprend le design de celles qu’il organise, mais sans les options de modification.</li>
+<li>La vue <em>Profil</em> n'a pas été fait</li>
 </ul>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Difficultés rencontrées</p>
 <ul>
-<li>Il reste complexe de s'assurer qu'un même évènement ne puisse pas être créé pour un même créneau horaire, au même endroit et sur la même infrastructure. Une logique de vérification supplémentaire devra être mise en place pour éviter ces doublons.</li>
+<li>Nous avons eu certaine difficulté ou niveau de l'enregistrement d'une activité créer dans la base de donnée Firebase et ensuite l'affiché dans la section activité organisées. Nous n'avons eu la chance ni le temps de mettre davantage de temps sur le problème cette semaine, mais nous ne pensons que cela sera un gros obstacle.</li>
 </ul>
 </div>
 <div class="admonition abstract">
 <p class="admonition-title">Prochaines étapes</p>
 <ul>
-<li>Développer le mode vue de la page <em>Activités</em>.</li>
-<li>Développer le mode vue de la page <em>Profil</em>.</li>
+<li>Développer le mode vue de la page <em>Activités</em> au niveau de la modification.</li>
+<li>Régler la logique d'enregistrement des données avec Firebase</li>
+<li>Faire la vue "liste" de mode <em>Explorer</em></li>
+<li>Développer le mode vue de la page <em>Profil</em> (si le temps le permet).</li>
+<li>Faire la vue <em>Home</em> (si le temps le permet)</li>
 </ul>
 </div>
 <hr />
