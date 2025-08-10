@@ -824,53 +824,30 @@
 <h1 id="conception">Conception<a class="headerlink" href="#conception" title="Permanent link">&para;</a></h1>
 <h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>SportLink/
-├── App/
-|   ├── SportLinkApp.swift
-|   └── EtatApp.swift
+├── AppEntry/
 |
-├── Fonctionnalitees/
-|   ├── Accueil/
-|   |   ├── Vues/
-|   |   ├── VuesModeles/
-|   |   └── Sousvues/
-│   ├── Explorer/
-|   |   ├── Vues/
-|   |   ├── VuesModeles/
-|   |   └── Sousvues/
-│   ├── Creer/
-|   |   ├── Vues/
-|   |   ├── VuesModeles/
-|   |   └── Sousvues/
-│   ├── Activites/
-|   |   ├── Vues/
-|   |   ├── VuesModeles/
-|   |   └── Sousvues/
-│   └── Profil/
-|       ├── Vues/
-|       ├── VuesModeles/
-|       └── Sousvues/
+├── Authentication/
 |
-├── ModelesPartagees/
-|   ├── Utilisateur.swift
-|   ├── Activite.swift
-|   ├── Message.swift
-|   └── Emplacement.swift
+├── Core/
+|   ├── Extensions/
+|   ├── Models/
+|   └── Services/
+|       ├── Firebase/
+|       └── Local/
 |
-├── ComposantesUI/
-|   ├── Boutons/
-|   ├── Icones/
-|   └── Cartes/
+├── Navigation/
+|   ├── Home/
+|   ├── Discover/
+|   ├── Create/
+|   ├── Bookings/
+|   └── Profile/
+|   
+├── Resources/
+|   ├── Assets/
+|   ├── Configuration/
+|   └── Data/
 |
-├── Services/
-|   ├── Geolocalisation/
-│   |   └── ServiceEmplacement.swift
-|   ├── Authentification/
-│   |   └── ServiceUtilisateur.swift
-|   └── Reseau/
-│       └── APIClient.swift
-|
-└── Ressources/
-    └── Actifs/
+└── Shared/
 </code></pre></div>
 <h2 id="choix-technologiques">Choix technologiques<a class="headerlink" href="#choix-technologiques" title="Permanent link">&para;</a></h2>
 <p>Nous avons opté pour un développement <strong>natif iOS en Swift</strong>, pour :</p>
