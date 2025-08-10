@@ -538,15 +538,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#architecture-du-systeme" class="md-nav__link">
-    <span class="md-ellipsis">
-      Architecture du système
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#choix-technologiques" class="md-nav__link">
     <span class="md-ellipsis">
       Choix technologiques
@@ -559,6 +550,15 @@
   <a href="#modeles-et-diagrammes" class="md-nav__link">
     <span class="md-ellipsis">
       Modèles et diagrammes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture-du-systeme" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architecture du système
     </span>
   </a>
   
@@ -734,15 +734,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#architecture-du-systeme" class="md-nav__link">
-    <span class="md-ellipsis">
-      Architecture du système
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#choix-technologiques" class="md-nav__link">
     <span class="md-ellipsis">
       Choix technologiques
@@ -755,6 +746,15 @@
   <a href="#modeles-et-diagrammes" class="md-nav__link">
     <span class="md-ellipsis">
       Modèles et diagrammes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture-du-systeme" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architecture du système
     </span>
   </a>
   
@@ -867,8 +867,6 @@
 |
 └── Shared/
 </code></pre></div>
-<h2 id="architecture-du-systeme">Architecture du système<a class="headerlink" href="#architecture-du-systeme" title="Permanent link">&para;</a></h2>
-<p><img alt="Modèle C4" src="../diagrams/out/modelec4.png" title="Modèle C4" /></p>
 <h2 id="choix-technologiques">Choix technologiques<a class="headerlink" href="#choix-technologiques" title="Permanent link">&para;</a></h2>
 <p>Nous avons opté pour un développement <strong>natif iOS en Swift</strong>, pour :</p>
 <ul>
@@ -891,20 +889,23 @@
 </li>
 </ul>
 <h2 id="modeles-et-diagrammes">Modèles et diagrammes<a class="headerlink" href="#modeles-et-diagrammes" title="Permanent link">&para;</a></h2>
-<p>Nous avons décidé de ne pas mettre les sous vues dans le diagramme, car nous pensons qu'il deviendrait trop grossier avec toutes les classes qui n'ont pas nécessairement d'attributs ou de méthodes pertinentes.
+<p>Voici notre diagramme UML :
 <img alt="Diagramme de classe UML" src="../diagrams/out/SportLink.svg" title="Diagramme de classe UML" /></p>
+<h2 id="architecture-du-systeme">Architecture du système<a class="headerlink" href="#architecture-du-systeme" title="Permanent link">&para;</a></h2>
+<p>Voici notre diagramme notre modèle C4 :
+<img alt="Modèle C4" src="../diagrams/out/modelec4.png" title="Modèle C4" /></p>
 <h2 id="modele-de-donnees">Modèle de données<a class="headerlink" href="#modele-de-donnees" title="Permanent link">&para;</a></h2>
 <p>Voici le modèle de données style NoSQL qui réflète les <em>entités métiers</em>. C'est ainsi que les données seront stockées dans Firebase.</p>
 <h3 id="utilisateurs"><code>utilisateurs</code><a class="headerlink" href="#utilisateurs" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code>utilisateurs    (collection)
 └── {utilisateurId}
-    ├── nomUtilisateur        : &quot;mimi123&quot;
-    ├── courriel              : &quot;michel@example.com&quot;
-    ├── photoProfil           : &quot;https://...&quot;
-    ├── disponibilites        : [&quot;lundi_AM&quot;, &quot;lundi_PM&quot;, &quot;mardi_AM&quot;] 
-    ├── sportsFavoris         : [&quot;Soccer&quot;, &quot;Tennis&quot;]                         
-    ├── favorisActivites      : [&quot;eventId4&quot;,&quot;eventId9&quot;]              
-    └── partenairesRecents    : [                                    
+    ├── nomUtilisateur      
+    ├── courriel              
+    ├── photoProfil           
+    ├── disponibilites        
+    ├── sportsFavoris                            
+    ├── favorisActivites               
+    └── partenairesRecents    :                                  
     │     { utilisateurId: &quot;autreId&quot;,
     │       sport: &quot;Soccer&quot;,
     │       dernierResultat: +10 }
@@ -914,15 +915,14 @@
 <div class="highlight"><pre><span></span><code>activites    (collection)
 ├── {activiteId}
     ├── organisateurId : &quot;utilisateurId&quot;
-    ├── sport : &quot;Basketball&quot;
-    ├── date : &quot;2025-06-12T17:00&quot;
-    ├── duree : &quot;02:00&quot;
+    ├── titre
+    ├── sport 
+    ├── date
+    ├── indraID
+    ├── descritpion
     ├── nbJoueursRecherches : 6
-    ├── participants : [utilisateurId1, utilisateurId2]
     ├── statut : &quot;ouvert&quot; | &quot;complet&quot; | &quot;annule&quot;
-    ├── emplacement : emplacementId
-    ├── invitationsOuvertes : true 
-    └── messages : [messageId1, messagesId2, ...]
+    └── invitationsOuvertes
 </code></pre></div>
 <h3 id="messages"><code>messages</code><a class="headerlink" href="#messages" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code>messages    (collection)
