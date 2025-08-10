@@ -575,15 +575,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#utilisateurs" class="md-nav__link">
-    <span class="md-ellipsis">
-      utilisateurs
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#activites" class="md-nav__link">
     <span class="md-ellipsis">
       activites
@@ -593,18 +584,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#messages" class="md-nav__link">
+  <a href="#utilisateurs" class="md-nav__link">
     <span class="md-ellipsis">
-      messages
+      utilisateurs
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#emplacements" class="md-nav__link">
+  <a href="#messages" class="md-nav__link">
     <span class="md-ellipsis">
-      emplacements
+      messages
     </span>
   </a>
   
@@ -771,15 +762,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#utilisateurs" class="md-nav__link">
-    <span class="md-ellipsis">
-      utilisateurs
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#activites" class="md-nav__link">
     <span class="md-ellipsis">
       activites
@@ -789,18 +771,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#messages" class="md-nav__link">
+  <a href="#utilisateurs" class="md-nav__link">
     <span class="md-ellipsis">
-      messages
+      utilisateurs
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#emplacements" class="md-nav__link">
+  <a href="#messages" class="md-nav__link">
     <span class="md-ellipsis">
-      emplacements
+      messages
     </span>
   </a>
   
@@ -896,25 +878,10 @@
 <img alt="Modèle C4" src="../diagrams/out/modelec4.png" title="Modèle C4" /></p>
 <h2 id="modele-de-donnees">Modèle de données<a class="headerlink" href="#modele-de-donnees" title="Permanent link">&para;</a></h2>
 <p>Voici le modèle de données style NoSQL qui réflète les <em>entités métiers</em>. C'est ainsi que les données seront stockées dans Firebase.</p>
-<h3 id="utilisateurs"><code>utilisateurs</code><a class="headerlink" href="#utilisateurs" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>utilisateurs    (collection)
-└── {utilisateurId}
-    ├── nomUtilisateur      
-    ├── courriel              
-    ├── photoProfil           
-    ├── disponibilites        
-    ├── sportsFavoris                            
-    ├── favorisActivites               
-    └── partenairesRecents    :                                  
-    │     { utilisateurId: &quot;autreId&quot;,
-    │       sport: &quot;Soccer&quot;,
-    │       dernierResultat: +10 }
-    │   ]
-</code></pre></div>
 <h3 id="activites"><code>activites</code><a class="headerlink" href="#activites" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code>activites    (collection)
 ├── {activiteId}
-    ├── organisateurId : &quot;utilisateurId&quot;
+    ├── organisateurId
     ├── titre
     ├── sport 
     ├── date
@@ -924,21 +891,20 @@
     ├── statut : &quot;ouvert&quot; | &quot;complet&quot; | &quot;annule&quot;
     └── invitationsOuvertes
 </code></pre></div>
+<h3 id="utilisateurs"><code>utilisateurs</code><a class="headerlink" href="#utilisateurs" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>utilisateurs    (collection)
+└── {utilisateurId}
+    ├── nomUtilisateur               
+    ├── photoUrl         
+    ├── disponibilites        
+    └── sportsFavoris                                                                  
+</code></pre></div>
 <h3 id="messages"><code>messages</code><a class="headerlink" href="#messages" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code>messages    (collection)
 └── {messageId}
     ├── auteurId : &quot;utilisateurId1&quot;,
     ├── contenu : &quot;Salut !&quot;,
     └── timestamp : &quot;2025-05-31T12:10:00&quot;
-</code></pre></div>
-<h3 id="emplacements"><code>emplacements</code><a class="headerlink" href="#emplacements" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>emplacements    (collection)
-└── {emplacementId}
-    ├── nomEmplacement    : &quot;Parc Jean-Drapeau&quot;
-    ├── latitude          : 45.508
-    ├── longitude         : -73.554
-    ├── sportsDisponibles : [&quot;Basketball&quot;, &quot;Soccer&quot;]
-    └── heuresOuvertures  : &quot;08:00-22:00&quot;
 </code></pre></div>
 <h2 id="prototype">Prototype<a class="headerlink" href="#prototype" title="Permanent link">&para;</a></h2>
 <p>La maquette Figma se trouve <a href="https://www.figma.com/design/N0QDEh5Shuht6eS3dpvKTB/SportLink?node-id=0-1&amp;t=CBkQlTjm84oNgfAk-1">ici</a>.</p>
