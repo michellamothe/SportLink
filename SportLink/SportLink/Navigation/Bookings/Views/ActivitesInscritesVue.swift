@@ -82,7 +82,7 @@ struct ActivitesInscritesVue: View {
                     VStack {
                         Spacer()
                         let texte = "you are not attending any \n activities yet"
-                        MessageAucuneActivite(texte: texte)
+                        MessageAucuneActivite(texte: texte, symbole: "calendar.badge.checkmark")
                         Spacer()
                     }
                     .frame(width: geometry.size.width, height: geometry.size.height)
@@ -96,6 +96,6 @@ struct ActivitesInscritesVue: View {
 #Preview {
     ActivitesInscritesVue(serviceEmplacements: DonneesEmplacementService())
         .environmentObject(DonneesEmplacementService())
-        .environmentObject(ActivitesVM(serviceEmplacements: DonneesEmplacementService()))
+        .environmentObject(ActivitesVM(serviceEmplacements: DonneesEmplacementService(), serviceUtilisateurConnecte: UtilisateurConnecteVM()))
         .environmentObject(ActivitesInscritesVM(serviceActivites: ServiceActivites(), serviceEmplacements: DonneesEmplacementService()))
 }

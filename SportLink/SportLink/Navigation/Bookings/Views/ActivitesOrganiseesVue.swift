@@ -79,7 +79,7 @@ struct ActivitesOrganiseesVue: View {
                     VStack {
                         Spacer()
                         let texte = "you have not planned any \n activities yet"
-                        MessageAucuneActivite(texte: texte)
+                        MessageAucuneActivite(texte: texte, symbole: "calendar.badge.plus")
                         Spacer()
                     }
                     .frame(width: geometry.size.width, height: geometry.size.height)
@@ -93,5 +93,5 @@ struct ActivitesOrganiseesVue: View {
 #Preview {
     ActivitesOrganiseesVue(serviceEmplacements: DonneesEmplacementService())
         .environmentObject(DonneesEmplacementService())
-        .environmentObject(ActivitesVM(serviceEmplacements: DonneesEmplacementService()))
+        .environmentObject(ActivitesVM(serviceEmplacements: DonneesEmplacementService(), serviceUtilisateurConnecte: UtilisateurConnecteVM()))
 }

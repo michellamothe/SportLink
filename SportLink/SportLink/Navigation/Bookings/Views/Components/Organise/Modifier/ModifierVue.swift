@@ -141,13 +141,13 @@ struct ModifierVue: View {
 
     private var champTitreModifiable: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("TITLE OF THE ACTIVITY")
+            Text("title of the activity".localizedUppercase)
                 .font(.subheadline)
                 .foregroundColor(.gray)
                 .fontWeight(.bold)
 
             HStack {
-                TextField("Nom de l'activité", text: $activite.titre)
+                TextField("name of the activity".localizedFirstCapitalized, text: $activite.titre)
                     .focused($titreEstEnEdition)
                     .submitLabel(.done)
                     .font(.headline)

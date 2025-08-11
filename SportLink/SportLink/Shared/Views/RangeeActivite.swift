@@ -89,18 +89,26 @@ struct RangeeActivite: View {
                 }
                 .overlay(alignment: .bottomTrailing) {
                     Image(systemName: estFavoris ? "bookmark.fill" : "bookmark")
-                        .font(.system(size: 19  ))
+                        .font(.system(size: 19))
                         .foregroundStyle(estFavoris ? couleur : .white)
                         .padding(8)
                         .background(.ultraThinMaterial)
                         .clipShape(Circle())
                         .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 2)
                         .padding([.bottom, .trailing], 8)
-                        .onTapGesture {
-                            withAnimation(.linear(duration: 0.2)) { estFavoris.toggle() }
-                        }
                         .disabled(afficherInfo)
                         .blur(radius: afficherInfo ? 6 : 0)
+                        .onAppear { estFavoris = activitesVM.estFavori(activite) }
+                        .onTapGesture {
+                            Task {
+                                // optimistic UI
+                                estFavoris.toggle()
+                                
+                                await activitesVM.toggleFavori(pour: activite, nouvelEtat: estFavoris)
+                                //estFavoris = activitesVM.estFavori(activite) // resync
+                              
+                            }
+                        }
                 }
                
                 VStack(alignment: .trailing, spacing: 6) {
@@ -230,6 +238,6 @@ struct RangeeActivite: View {
             serviceEmplacements: DonneesEmplacementService(), serviceActivites: ServiceActivites()
         )
     }())
-    .environmentObject(ActivitesVM(serviceEmplacements: DonneesEmplacementService()))
+    .environmentObject(ActivitesVM(serviceEmplacements: DonneesEmplacementService(), serviceUtilisateurConnecte: UtilisateurConnecteVM()))
     .environmentObject(AppVM())
 }

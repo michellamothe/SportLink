@@ -83,8 +83,8 @@ struct ActivitesFavoritesVue: View {
                 GeometryReader { geometry in
                     VStack {
                         Spacer()
-                        let texte = "you are not attending any \n activities yet"
-                        MessageAucuneActivite(texte: texte)
+                        let texte = "you have no activites \n bookmarked yet"
+                        MessageAucuneActivite(texte: texte, symbole: "bookmark.slash")
                         Spacer()
                     }
                     .frame(width: geometry.size.width, height: geometry.size.height)
@@ -97,6 +97,6 @@ struct ActivitesFavoritesVue: View {
 
 #Preview {
     ActivitesFavoritesVue(serviceEmplacements: DonneesEmplacementService(), utilisateurConnecteVM: UtilisateurConnecteVM())
-        .environmentObject(ActivitesVM(serviceEmplacements: DonneesEmplacementService()))
+        .environmentObject(ActivitesVM(serviceEmplacements: DonneesEmplacementService(), serviceUtilisateurConnecte: UtilisateurConnecteVM()))
 }
 

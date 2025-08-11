@@ -36,6 +36,12 @@ class UtilisateurConnecteVM: ObservableObject {
 
             // Charger sportsFavoris
             let sportsFavoris = (data["sportsFavoris"] as? [String] ?? []).compactMap { Sport(rawValue: $0) }
+            
+            // Charger activitesFavorites
+            let activitesFavorites = data["activitesFavorites"] as? [String] ?? []
+            let activitesFavoris = activitesFavorites.compactMap { id in
+                ActiviteID(valeur: id)
+            }
 
             // Pour l’instant, on laisse les favoris et partenaires vides
             let utilisateur = Utilisateur(
@@ -44,7 +50,7 @@ class UtilisateurConnecteVM: ObservableObject {
                 photoProfil: photoProfil,
                 disponibilites: disponibilites,
                 sportsFavoris: sportsFavoris,
-                activitesFavoris: [],
+                activitesFavoris: activitesFavoris,
                 partenairesRecents: []
             )
 

@@ -548,7 +548,7 @@ struct TexteJustifieeVue: UIViewRepresentable {
         .environmentObject({
             let s = DonneesEmplacementService()
             s.chargerDonnees()
-            return ActivitesVM(serviceEmplacements: s)
+            return ActivitesVM(serviceEmplacements: DonneesEmplacementService(), serviceUtilisateurConnecte: UtilisateurConnecteVM())
         }())
         .environmentObject(ActivitesOrganiseesVM(serviceActivites: ServiceActivites(), serviceEmplacements: DonneesEmplacementService()))
 }

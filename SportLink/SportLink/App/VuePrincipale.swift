@@ -18,7 +18,7 @@ struct VuePrincipale: View {
     let onDeconnexion: () -> Void
     
     init(serviceEmplacements: DonneesEmplacementService, utilisateurConnecteVM: UtilisateurConnecteVM, onDeconnexion: @escaping () -> Void) {
-        self._activitesVM = StateObject(wrappedValue: ActivitesVM(serviceEmplacements: serviceEmplacements))
+        self._activitesVM = StateObject(wrappedValue: ActivitesVM(serviceEmplacements: serviceEmplacements, serviceUtilisateurConnecte: utilisateurConnecteVM))
         self._session = StateObject(wrappedValue: Session(serviceEmplacements: serviceEmplacements, utilisateurConnecteVM: utilisateurConnecteVM))
         self.onDeconnexion = onDeconnexion
     }

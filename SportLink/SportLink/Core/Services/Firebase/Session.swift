@@ -86,13 +86,13 @@ class Session: ObservableObject {
         // Filtrage par dispos
         if let u = self.serviceUtilisateurConnecte.utilisateur, !u.disponibilites.isEmpty {
             resultat = resultat.filter { a in
-                let jour = weekdayIndexApp(from: a.date.debut) // 1=lundi…7=dimanche
+                let jour = jourDeSemaineIndexApp(from: a.date.debut) // 1=lundi…7=dimanche
                 guard let creneaux = u.disponibilites[jour], !creneaux.isEmpty else {
                     return false // pas dispo ce jour-là
                 }
 
                 // Plage activité en minutes
-                let act = (minutesSinceMidnight(a.date.debut), minutesSinceMidnight(a.date.fin))
+                let act = (minutesDepuisMinuit(a.date.debut), minutesDepuisMinuit(a.date.fin))
 
                 // Au moins un créneau dispo chevauche la plage de l’activité
                 for s in creneaux {
@@ -126,27 +126,27 @@ class Session: ObservableObject {
         return calculerDistanceEntreCoordonnees(position1: userLoc, position2: infraCoords) // en mètres
     }
     
-    private func weekdayIndexApp(from date: Date) -> Int {
+    private func jourDeSemaineIndexApp(from date: Date) -> Int {
         // Swift: .weekday (1=dimanche … 7=samedi). On remappe vers 1=lundi … 7=dimanche.
         let w = Calendar.current.component(.weekday, from: date) // 1..7
         return (w == 1) ? 7 : (w - 1) // 1..7 avec 1=lundi
     }
 
-    private func minutesSinceMidnight(_ date: Date) -> Int {
+    private func minutesDepuisMinuit(_ date: Date) -> Int {
         let comps = Calendar.current.dateComponents([.hour, .minute], from: date)
         return (comps.hour ?? 0) * 60 + (comps.minute ?? 0)
     }
 
     private func parseCreneau(_ s: String) -> (debut: Int, fin: Int)? {
-        let trimmed = s.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-        if trimmed == "AM" { return (0, 12*60) }           // 00:00-12:00
-        if trimmed == "PM" { return (12*60, 24*60 - 1) }   // 12:00-23:59
+        let trimme = s.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        if trimme == "AM" { return (0, 12*60) }           // 00:00-12:00
+        if trimme == "PM" { return (12*60, 24*60 - 1) }   // 12:00-23:59
 
         // Format "HH:mm-HH:mm"
-        let parts = trimmed.split(separator: "-").map { String($0) }
-        guard parts.count == 2,
-              let d = parseHHmm(parts[0]),
-              let f = parseHHmm(parts[1])
+        let parties = trimme.split(separator: "-").map { String($0) }
+        guard parties.count == 2,
+              let d = parseHHmm(parties[0]),
+              let f = parseHHmm(parties[1])
         else { return nil }
         return (d, f)
     }

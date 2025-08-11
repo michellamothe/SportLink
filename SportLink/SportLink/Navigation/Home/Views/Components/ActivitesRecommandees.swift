@@ -18,7 +18,7 @@ struct ActivitesRecommandees: View {
                 if session.activitesRecommandees.isEmpty {
                     ContentUnavailableView(
                         "No recommanded activites",
-                        systemImage: "bookmark.slash",
+                        systemImage: "star.slash",
                         description: Text("Add favorite sports or adjust your disponibilities.")
                     )
                     .frame(maxWidth: .infinity)

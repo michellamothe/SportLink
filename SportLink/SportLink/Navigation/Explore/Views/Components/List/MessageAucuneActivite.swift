@@ -9,10 +9,11 @@ import SwiftUI
 
 struct MessageAucuneActivite: View {
     let texte: String
+    var symbole: String = "figure.run"
     
     var body: some View {
         VStack(alignment: .center, spacing: 12) {
-            Image(systemName: "figure.run")
+            Image(systemName: symbole)
                 .font(.system(size: 60))
             Text(texte.localizedFirstCapitalized)
                 .font(.title2)

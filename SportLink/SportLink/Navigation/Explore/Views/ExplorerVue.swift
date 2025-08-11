@@ -55,5 +55,5 @@ struct ExplorerVue: View {
     
     ExplorerVue(utilisateur: .constant(mockUtilisateur))
         .environmentObject(DonneesEmplacementService())
-        .environmentObject(ActivitesVM(serviceEmplacements: DonneesEmplacementService()))
+        .environmentObject(ActivitesVM(serviceEmplacements: DonneesEmplacementService(), serviceUtilisateurConnecte: UtilisateurConnecteVM()))
 }

@@ -35,7 +35,7 @@ enum ActiviteErreur: Error {
 }
 
 struct ActiviteID: Hashable, Codable {
-    let valeur: UUID
+    let valeur: String
 }
 
 struct PlageHoraire: Codable {
@@ -152,5 +152,11 @@ extension Activite: Hashable {
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+    }
+}
+
+extension String {
+    var enActiviteID: ActiviteID {
+        ActiviteID(valeur: self)
     }
 }

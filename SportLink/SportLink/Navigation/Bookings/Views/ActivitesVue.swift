@@ -97,7 +97,7 @@ struct ActivitesVue: View {
 #Preview {
     ActivitesVue()
         .environmentObject(DonneesEmplacementService())
-        .environmentObject(ActivitesVM(serviceEmplacements: DonneesEmplacementService()))
+        .environmentObject(ActivitesVM(serviceEmplacements: DonneesEmplacementService(), serviceUtilisateurConnecte: UtilisateurConnecteVM()))
         .environmentObject(UtilisateurConnecteVM())
 }
 

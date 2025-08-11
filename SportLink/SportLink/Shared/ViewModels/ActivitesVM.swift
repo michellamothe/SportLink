@@ -8,17 +8,56 @@
 import Foundation
 import MapKit
 import SwiftUI
+import FirebaseFirestore
 
 @MainActor
 class ActivitesVM: ObservableObject {
     private let serviceEmplacements: DonneesEmplacementService
     private let gestionnaireLocalisation = GestionnaireLocalisation.instance
+    private let serviceUtilisateurConnecte: UtilisateurConnecteVM
     
+    @Published private(set) var favoris: Set<String> = []
     @Published var imageApercu: UIImage?
     
-    init(serviceEmplacements: DonneesEmplacementService) {
+    init(serviceEmplacements: DonneesEmplacementService, serviceUtilisateurConnecte: UtilisateurConnecteVM) {
         self.serviceEmplacements = serviceEmplacements
+        self.serviceUtilisateurConnecte = serviceUtilisateurConnecte
+        self.favoris = Set(serviceUtilisateurConnecte.utilisateur?.activitesFavoris.map(\.valeur) ?? [])
     }
+    
+    func estFavori(_ a: Activite) -> Bool {
+        guard let aid = a.id else { return false }
+        return favoris.contains(aid) // favoris is a @Published Set<UUID> in the VM
+    }
+
+    func toggleFavori(pour activite: Activite, nouvelEtat: Bool) async {
+        guard let aid = activite.id else { return }
+    
+        do {
+            let utilisateurData = try GestionnaireAuthentification.partage.obtenirUtilisateurAuthentifier()
+            let ref = Firestore.firestore()
+                .collection("utilisateurs")
+                .document(utilisateurData.uid)
+            
+            if nouvelEtat {
+                try? await ref.updateData(["activitesFavorites": FieldValue.arrayUnion([aid])])
+                // État local
+                favoris.insert(aid)
+                serviceUtilisateurConnecte.utilisateur?
+                    .activitesFavoris.append(ActiviteID(valeur: aid))
+            } else {
+                try? await ref.updateData(["activitesFavorites": FieldValue.arrayRemove([aid])])
+                favoris.remove(aid)
+                serviceUtilisateurConnecte.utilisateur?
+                    .activitesFavoris.removeAll { $0.valeur == aid }
+            }
+        } catch {
+            print("Erreur lors de la récupération des données utilisateur : \(error)")
+        }
+    }
+
+
+    
     
     func obtenirDistanceDeUtilisateur(pour activite: Activite) -> String {
         guard
@@ -53,10 +92,10 @@ class ActivitesVM: ObservableObject {
             let options = MKMapSnapshotter.Options()
             
             /* Il y a quatre possibilités :
-                    1. un centre qui contient la localisation utilisateur et l'infra choisie
-                    2. un centre qui est seulement la localisation utilisateur
-                    3. un centre qui est seulement l'infra choisie
-                    4. un centre par défaut
+             1. un centre qui contient la localisation utilisateur et l'infra choisie
+             2. un centre qui est seulement la localisation utilisateur
+             3. un centre qui est seulement l'infra choisie
+             4. un centre par défaut
              */
             
             let utilisateurCoord = gestionnaireLocalisation.location?.coordinate
@@ -81,7 +120,7 @@ class ActivitesVM: ObservableObject {
             options.scale = UIScreen.main.scale
             options.preferredConfiguration = MKStandardMapConfiguration(emphasisStyle: .muted)
             options.pointOfInterestFilter = .excludingAll
-        
+            
             MKMapSnapshotter(options: options).start(with: .main) { capture, erreur in
                 guard let capture = capture, erreur == nil else { return }
                 let image = capture.image
@@ -132,7 +171,7 @@ class ActivitesVM: ObservableObject {
                 // Dessiner le marqueur
                 UIColor.red.setFill()
                 cheminMarqueur.fill()
-                                
+                
                 context?.setShadow(offset: .zero, blur: 0, color: nil)
                 
                 // Dessiner l'icône du sport à l'intérieur
@@ -158,7 +197,7 @@ class ActivitesVM: ObservableObject {
                     
                     let context = UIGraphicsGetCurrentContext()
                     context?.setShadow(offset: CGSize(width: 0, height: 2), blur: 4, color: UIColor.black.withAlphaComponent(0.3).cgColor)
-                                                        
+                    
                     // Cercle externe blanc
                     let cercleExterne = CGRect(
                         x: centreUtilisateur.x - rayonExterne,
@@ -208,7 +247,7 @@ class ActivitesVM: ObservableObject {
         let jourDuMoisFormat = DateFormatter()
         jourDuMoisFormat.locale = Locale.current
         jourDuMoisFormat.dateFormat = "MMMM d"
- 
+        
         let jourDeSemaine: String
         if calendrier.isDateInToday(date) {
             jourDeSemaine = "Today"
@@ -224,7 +263,7 @@ class ActivitesVM: ObservableObject {
     
     func obtenirPhotoEtNomParticipants(participantIds: [UtilisateurID], serviceUtilisateurs: ServiceUtilisateurs) async -> [(Image, String)] {
         var nomTrieesParNbCharacteres: [(Image, String)] = []
-     
+        
         for uid in participantIds {
             let (nomOpt, uiImageOpt) = await serviceUtilisateurs.fetchInfoUtilisateur(pour: uid.valeur)
             let image = uiImageOpt.map { Image(uiImage: $0) } ?? Image(systemName: "person.crop.circle.fill")
@@ -233,10 +272,5 @@ class ActivitesVM: ObservableObject {
         }
         
         return nomTrieesParNbCharacteres.sorted { $0.1.count < $1.1.count }
-    }
-    
-    
-    func chercherSiActiviteEstEnFavoris(pour activite: Activite) -> Bool {
-        return true
     }
 }

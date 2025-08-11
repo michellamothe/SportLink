@@ -123,7 +123,7 @@ struct AccueilVue: View {
 
 #Preview {
     AccueilVue()
-        .environmentObject(ActivitesVM(serviceEmplacements: DonneesEmplacementService()))
+        .environmentObject(ActivitesVM(serviceEmplacements: DonneesEmplacementService(), serviceUtilisateurConnecte: UtilisateurConnecteVM()))
         .environmentObject(DonneesEmplacementService())
         .environmentObject(Session(serviceEmplacements: DonneesEmplacementService(), utilisateurConnecteVM: UtilisateurConnecteVM()))
 }

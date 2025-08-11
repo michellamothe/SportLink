@@ -25,7 +25,14 @@ class ActivitesFavoritesVM: ObservableObject {
     
     func fetchActivitesFavorites() async {
         estEnChargement = true
-        
+        guard let favoris = serviceUtilisateurConnecte.utilisateur?.activitesFavoris else {
+            activites = []
+            estEnChargement = false
+            return
+        }
+        let ids = favoris.map { $0.valeur }
+        await serviceActivites.fetchActivitesParIds(ids: ids)
+        self.activites = serviceActivites.activites
         estEnChargement = false
     }
     

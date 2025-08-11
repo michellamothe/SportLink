@@ -43,6 +43,33 @@ class ServiceActivites: ObservableObject {
         }
     }
     
+    // MARK: Pour activites favoris de l'utilisateur connecté
+    func fetchActivitesParIds(ids: [String]) async {
+        guard !ids.isEmpty else {
+            self.activites = []
+            return
+        }
+
+        do {
+            let requeteSnapshot = try await Firestore.firestore()
+                .collection("activites")
+                .whereField(FieldPath.documentID(), in: ids)
+                .getDocuments()
+
+            let activitesConverties = try requeteSnapshot.documents.map { doc in
+                let dto = try doc.data(as: ActiviteDTO.self)
+                var activite = dto.versActivite()
+                activite.id = doc.documentID
+                return activite
+            }
+
+            self.activites = activitesConverties
+        } catch {
+            print("Erreur lors de la récupération des activités favorites : \(error)")
+            self.activites = []
+        }
+    }
+    
     func fetchActivitesParInfrastructureEtDateAsync(infraId: String, date: Date) async {
         let activitesConverties = await fetchActivitesParInfrastructure(infraId: infraId)
         
