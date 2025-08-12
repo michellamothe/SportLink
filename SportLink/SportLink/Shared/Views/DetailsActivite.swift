@@ -15,6 +15,7 @@ struct DetailsActivite: View {
     @StateObject private var serviceUtilisateurs = ServiceUtilisateurs()
     @State private var opaciteEnTete: CGFloat = 0
     @State private var montrerDialogueParametres = false
+    @State private var confirmerSuppression = false
     @State private var montrerVueEdition = false
     @State private var estFavoris = false // Temporaire
     @State private var refreshID = UUID()
@@ -35,9 +36,9 @@ struct DetailsActivite: View {
             .ignoresSafeArea()
         }
         .task { _ = await activitesVM.genererApercu(infraId: activite.infraId) }
-        .confirmationDialog("Settings", isPresented: $montrerDialogueParametres, titleVisibility: .hidden) {
-            Button("Edit activity") { montrerVueEdition = true }
-            Button("Delete activity", role: .destructive) { /* EffacerActivite() */ }
+        .confirmationDialog("Settings", isPresented: $montrerDialogueParametres, titleVisibility: .visible) {
+            Button("edit activity".localizedFirstCapitalized) { montrerVueEdition = true }
+            Button("delete activity".localizedFirstCapitalized, role: .destructive) { confirmerSuppression = true }
             Button("Cancel", role: .cancel) { }
         }
         .sheet(isPresented: $montrerVueEdition) {
@@ -48,7 +49,17 @@ struct DetailsActivite: View {
         .onChange(of: activite) { _, _ in
             refreshID = UUID()
         }
-
+        .alert("Delete this activity?", isPresented: $confirmerSuppression) {
+            Button("Delete", role: .destructive) {
+                Task {
+                    await activitesVM.supprimerActivite(pour: activite)
+                    dismiss()
+                }
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("This action can’t be undone.")
+        }
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)
     }

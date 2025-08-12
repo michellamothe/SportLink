@@ -78,7 +78,16 @@ class ActivitesVM: ObservableObject {
     }
 
 
-    
+    func supprimerActivite(pour activite: Activite) async {
+        do {
+            try await Firestore.firestore()
+                .collection("activites")
+                .document(activite.id!)
+                .delete()
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
     
     func obtenirDistanceDeUtilisateur(pour activite: Activite) -> String {
         guard
