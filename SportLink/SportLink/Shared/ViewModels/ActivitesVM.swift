@@ -25,6 +25,27 @@ class ActivitesVM: ObservableObject {
         self.favoris = Set(serviceUtilisateurConnecte.utilisateur?.activitesFavoris.map(\.valeur) ?? [])
     }
     
+    func mettreAJourStatutEtPlaces(activiteId: String) async {
+        let ref = Firestore.firestore().collection("activites").document(activiteId)
+        do {
+            let snap = try await ref.getDocument()
+            guard
+                let nb = snap.data()?["nbJoueursRecherches"] as? Int,
+                let participants = snap.data()?["participants"] as? [String]
+            else { return }
+
+            let places = max(nb - participants.count, 0)
+            let statut: StatutActivite = (places == 0) ? .complet : .ouvert
+
+            try await ref.updateData([
+                "statut": statut.rawValue,
+                "placesDispo": places,
+                "dateMiseAJour": FieldValue.serverTimestamp()
+            ])
+        } catch { print("Maj statut/places: \(error)") }
+    }
+
+    
     func estFavori(_ a: Activite) -> Bool {
         guard let aid = a.id else { return false }
         return favoris.contains(aid) // favoris is a @Published Set<UUID> in the VM

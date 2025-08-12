@@ -17,7 +17,7 @@ class Session: ObservableObject {
     private let nombreActivitesRecommandeesAAfficheer = 3
     
     @Published var avatar: Image = Image(systemName: "person.crop.circle.fill")
-    @Published var activitesRecommandees: [Activite] = []
+    @Published var activites: [Activite] = []
     @Published var estPret: Bool = false
     
     private var listener: ListenerRegistration?
@@ -47,7 +47,7 @@ class Session: ObservableObject {
                             let dtos = try docs.map { try $0.data(as: ActiviteDTO.self) }
                             let activites = dtos.map { $0.versActivite() }
                             let filtrees = self.filtrerLesRecommandations(activites: activites)
-                            self.activitesRecommandees = Array(filtrees.prefix(self.nombreActivitesRecommandeesAAfficheer))
+                            self.activites = Array(filtrees.prefix(self.nombreActivitesRecommandeesAAfficheer))
                             self.estPret = true
                         } catch {
                             print("Map DTO -> Activite error: \(error)")
@@ -58,6 +58,15 @@ class Session: ObservableObject {
     }
     
     deinit { listener?.remove() }
+    
+    
+    func bindingActivite(id: String) -> Binding<Activite>? {
+        guard let index = activites.firstIndex(where: { $0.id == id }) else { return nil }
+        return Binding(
+            get: { self.activites[index] },
+            set: { self.activites[index] = $0 }
+        )
+    }
     
     private func filtrerLesRecommandations(activites: [Activite]) -> [Activite] {
         var resultat = activites

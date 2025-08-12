@@ -24,13 +24,9 @@ struct ActivitesFavoritesVue: View {
     
     var body: some View {
         ScrollView { sectionActivites }
-            .task {
-                if vm.activites.isEmpty {
-                    await vm.fetchActivitesFavorites() // initial load
-                }
-            }
+            .task { await vm.fetchActivitesFavorites() }
             .onReceive(activitesVM.$favoris.removeDuplicates()) { ids in
-                Task { await vm.syncWithFavoris(ids) } // live refresh
+                Task { await vm.syncWithFavoris(ids) } 
             }
             .refreshable { await vm.fetchActivitesFavorites() }
             .onTapGesture {
@@ -42,9 +38,9 @@ struct ActivitesFavoritesVue: View {
                 if let binding = vm.bindingActivite(id: activite.id!) {
                     DetailsActivite(activite: binding)
                         .environmentObject(activitesVM)
-                        .environmentObject(vm)
                         .environmentObject(appVM)
                         .cacherBoutonEditable()
+                        .estDansVueFavoris(true)
                 }
             }
     }

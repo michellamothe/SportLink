@@ -22,11 +22,7 @@ struct ActivitesInscritesVue: View {
     
     var body: some View {
         ScrollView { sectionActivites }
-            .task {
-                if vm.activites.isEmpty {
-                    await vm.fetchActivitesInscrites()
-                }
-            }
+            .task { await vm.fetchActivitesInscrites() }
             .refreshable { await vm.fetchActivitesInscrites() }
             .onTapGesture {
                 if activiteAffichantInfo != nil {

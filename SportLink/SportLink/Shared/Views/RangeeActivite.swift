@@ -29,11 +29,22 @@ struct RangeeActivite: View {
         return parc.nom!
     }
     
+    private var statutAffiche: StatutActivite {
+        if activite.statut == .annulee { return .annulee }
+        let remaining = activite.nbJoueursRecherches - activite.participants.count
+        return remaining <= 0 ? .complet : .ouvert
+    }
+
     private var nbPlacesRestantes: String {
-        let diff = activite.nbJoueursRecherches - activite.participants.count
-        
-        if diff == 0 { return "No spot left" }
-        return String(format: "%d spots left", diff)
+        let remaining = max(activite.nbJoueursRecherches - activite.participants.count, 0)
+        return remaining == 0 ? "No spot left"
+                              : "\(remaining) \(remaining == 1 ? "spot" : "spots") left"
+    }
+
+    
+    private var estNonRejoignable: Bool {
+        activite.statut == .complet ||
+                  activite.nbJoueursRecherches - activite.participants.count <= 0
     }
     
     private var composantesDate: String {
@@ -123,7 +134,8 @@ struct RangeeActivite: View {
                             .font(.system(size: 16))
                             .fontWeight(.light)
                     }
-                    .foregroundStyle(Color(uiColor: activite.statut.couleur))
+                    .foregroundStyle(Color(uiColor: statutAffiche.couleur))
+
                     
                     HStack(alignment: .top) {
                         Image(systemName: Sport.depuisNom(activite.sport).icone)
@@ -170,7 +182,7 @@ struct RangeeActivite: View {
                             .foregroundColor(.primary)
                     }
                    
-                    if !cacherBoutonJoin {
+                    if !cacherBoutonJoin && !estNonRejoignable {
                         Divider()
                             .frame(width: 1, height: 50)
                         
@@ -183,6 +195,8 @@ struct RangeeActivite: View {
                                         pour: utilisateur.uid,
                                         ajouter: true
                                     )
+                                    
+                                    await activitesVM.mettreAJourStatutEtPlaces(activiteId: activite.id!)
                         
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                         appVM.ongletSelectionne = .activites
@@ -194,7 +208,7 @@ struct RangeeActivite: View {
                                 }
                             }
                         } label: {
-                            Text("Join")
+                            Text("join".localizedCapitalized)
                                 .frame(maxWidth: .infinity)
                                 .foregroundColor(couleur)
                                 .fontWeight(.semibold)

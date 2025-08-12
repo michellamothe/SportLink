@@ -20,6 +20,10 @@ private struct DateEtendueKey: EnvironmentKey {
     static let defaultValue = false
 }
 
+private struct EstDansVueFavorisKey: EnvironmentKey {
+    static let defaultValue = false
+}
+
 extension EnvironmentValues {
     var cacherBoutonJoin: Bool {
         get { self[CacherBoutonJoinKey.self] }
@@ -35,6 +39,11 @@ extension EnvironmentValues {
         get { self[DateEtendueKey.self] }
         set { self[DateEtendueKey.self] = newValue }
     }
+    
+    var estDansVueFavoris: Bool {
+        get { self[EstDansVueFavorisKey.self] }
+        set { self[EstDansVueFavorisKey.self] = newValue }
+    }
 }
 
 extension View {
@@ -48,5 +57,9 @@ extension View {
     
     func dateEtendue(_ etendue: Bool = true) -> some View {
         environment(\.dateEtendue, etendue)
+    }
+    
+    func estDansVueFavoris(_ estDedans: Bool = false) -> some View {
+        environment(\.estDansVueFavoris, estDedans)
     }
 }

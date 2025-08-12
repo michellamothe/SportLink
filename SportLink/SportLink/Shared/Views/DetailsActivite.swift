@@ -48,11 +48,7 @@ struct DetailsActivite: View {
         .onChange(of: activite) { _, _ in
             refreshID = UUID()
         }
-        .onChange(of: estFavoris) { _, nvValeur in
-            if nvValeur == false {
-                dismiss()
-            }
-        }
+
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)
     }
@@ -183,11 +179,12 @@ struct Details: View {
     // MARK: Variables et propriétés calculées
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var activitesVM: ActivitesVM
-    @EnvironmentObject var activitesOrganiseesVM: ActivitesOrganiseesVM
+    //@EnvironmentObject var activitesInscritesVM: ActivitesInscritesVM
     @EnvironmentObject var appVM: AppVM
     @StateObject private var serviceActivites = ServiceActivites()
     @Environment(\.cacherBoutonJoin) var cacherBoutonJoin
     @Environment(\.cacherBoutonEditable) var cacherBoutonEditable
+    @Environment(\.estDansVueFavoris) var estDansVueFavoris
     @StateObject private var recherchePOI = RecherchePOIVM()
     @ObservedObject var serviceUtilisateurs: ServiceUtilisateurs
     @State private var montrerDialogueAjouterCalendrier = false
@@ -219,6 +216,11 @@ struct Details: View {
         let (_, tempsDebut, tempsFin) = activite.date.affichage
         return (date, "\(tempsDebut) - \(tempsFin)")
     }
+    
+    private var estNonRejoignable: Bool {
+        activite.statut == .complet ||
+                  activite.nbJoueursRecherches - activite.participants.count <= 0
+    }
 
     // MARK: Body et viewbuilders
     var body: some View {
@@ -246,8 +248,8 @@ struct Details: View {
         .clipShape(UnevenRoundedRectangle(cornerRadii: .init(topLeading: 30, topTrailing: 30), style: .continuous))
         .shadow(color: Color.black.opacity(0.15), radius: 10, y: -18)
         .confirmationDialog("Calendar", isPresented: $montrerDialogueAjouterCalendrier, titleVisibility: .hidden) {
-            Button("Add to calendar") { }
-            Button("Cancel", role: .cancel) { }
+            Button("add to calendar".localizedFirstCapitalized) { }
+            Button("cancel".localizedCapitalized, role: .cancel) { }
         }
         .alert("remove bookmark?".localizedFirstCapitalized,
                isPresented: $montrerDialogueFavoris) {
@@ -273,6 +275,8 @@ struct Details: View {
                             pour: utilisateur.uid,
                             ajouter: false
                         )
+                        
+                        await activitesVM.mettreAJourStatutEtPlaces(activiteId: activite.id!)
 
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                             dismiss()
@@ -311,7 +315,14 @@ struct Details: View {
                     .onAppear { estFavoris = activitesVM.estFavori(activite) }
                     .onTapGesture {
                         if estFavoris {
-                            montrerDialogueFavoris = true
+                            if estDansVueFavoris {
+                                montrerDialogueFavoris = true
+                            } else {
+                                Task {
+                                    estFavoris = false
+                                    await activitesVM.toggleFavori(pour: activite, nouvelEtat: estFavoris)
+                                }
+                            }
                         } else {
                             Task {
                                 estFavoris = true
@@ -570,7 +581,7 @@ struct Details: View {
                     }
                 }
             } label: {
-                Text("join activity".localizedFirstCapitalized)
+                Text(!estNonRejoignable ? "join activity".localizedFirstCapitalized : "full right now".localizedCapitalized)
                     .font(.callout.weight(.semibold))
                     .foregroundStyle(.white)
             }
@@ -578,8 +589,9 @@ struct Details: View {
             .padding()
             .background(
                 RoundedRectangle(cornerRadius: 20)
-                    .fill(Color("CouleurParDefaut"))
+                    .fill(!estNonRejoignable ? Color("CouleurParDefaut") : Color(.darkGray))
             )
+            .disabled(estNonRejoignable)
         }
     }
     
@@ -637,8 +649,8 @@ struct TexteJustifieeVue: UIViewRepresentable {
         infraId: "081-0090",
         sport: .soccer,
         date: DateInterval(start: .now, duration: 3600),
-        nbJoueursRecherches: 4,
-        participants: [],
+        nbJoueursRecherches: 1,
+        participants: [UtilisateurID(valeur: "a")],
         description: "Rejoignez-nous pour un match de soccer amical dans une ambiance conviviale et sportive. Perfect pour tous les niveaux, venez jouer et vous amuser en équipe sur le terrain.",
         statut: .ouvert,
         invitationsOuvertes: true,
@@ -652,4 +664,5 @@ struct TexteJustifieeVue: UIViewRepresentable {
             return ActivitesVM(serviceEmplacements: DonneesEmplacementService(), serviceUtilisateurConnecte: UtilisateurConnecteVM())
         }())
         .environmentObject(ActivitesOrganiseesVM(serviceActivites: ServiceActivites(), serviceEmplacements: DonneesEmplacementService()))
+        .environmentObject(ActivitesInscritesVM(serviceActivites: ServiceActivites(), serviceEmplacements: DonneesEmplacementService()))
 }

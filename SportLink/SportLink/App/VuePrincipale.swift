@@ -49,6 +49,7 @@ struct VuePrincipale: View {
             case .accueil:
                 AccueilVue()
                     .environmentObject(activitesVM)
+                    .environmentObject(appVM)
                     .environmentObject(session)
             case .explorer:
                 ExplorerVue(utilisateur: .constant(mockUtilisateur))
