@@ -10,22 +10,15 @@ import SwiftUI
 struct ExplorerListeVue: View {
     @EnvironmentObject var activitesVM: ActivitesVM
     @EnvironmentObject var appVM: AppVM
-    @StateObject private var vm: ExplorerListeVM
+    @EnvironmentObject private var vm: ExplorerListeVM
     @FocusState private var estEnTrainDeChercher: Bool
     @State private var afficherFiltreOverlay = false
     @State private var activiteAffichantInfo: Activite.ID? = nil
     
     @Binding var utilisateur: Utilisateur
     
-    init(
-        utilisateur: Binding<Utilisateur>,
-        serviceEmplacements: DonneesEmplacementService
-    ) {
+    init(utilisateur: Binding<Utilisateur>,) {
         self._utilisateur = utilisateur
-        self._vm = StateObject(wrappedValue: ExplorerListeVM(
-            serviceEmplacements: serviceEmplacements,
-            serviceActivites: ServiceActivites()
-        ))
     }
     
     var body: some View {
@@ -155,9 +148,12 @@ struct ExplorerListeVue: View {
     )
     
     ExplorerListeVue(
-        utilisateur: .constant(mockUtilisateur),
-        serviceEmplacements: DonneesEmplacementService()
+        utilisateur: .constant(mockUtilisateur)
     )
     .environmentObject(ActivitesVM(serviceEmplacements: DonneesEmplacementService(), serviceUtilisateurConnecte: UtilisateurConnecteVM()))
     .environmentObject(AppVM())
+    .environmentObject(ExplorerListeVM(
+            serviceEmplacements: DonneesEmplacementService(),
+            serviceActivites: ServiceActivites()
+        ))
 }

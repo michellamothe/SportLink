@@ -8,22 +8,21 @@
 import SwiftUI
 
 struct ExplorerVue: View {
-    @EnvironmentObject var serviceEmplacements: DonneesEmplacementService
-    @EnvironmentObject var activitesVM: ActivitesVM
+    let serviceEmplacements: DonneesEmplacementService
     @State private var modeAffichage: ModeAffichage = .liste
     @Binding var utilisateur: Utilisateur
+    
+    init(utilisateur: Binding<Utilisateur>, serviceEmplacements: DonneesEmplacementService) {
+        self._utilisateur = utilisateur
+        self.serviceEmplacements = serviceEmplacements
+    }
 
     var body: some View {
         ZStack {
             Group {
                 if modeAffichage == .liste {
-                    ExplorerListeVue(
-                        utilisateur: $utilisateur,
-                        serviceEmplacements: serviceEmplacements
-                    )
-                    .environmentObject(serviceEmplacements)
-                    .environmentObject(activitesVM)
-                    .transition(.move(edge: .leading))
+                    ExplorerListeVue(utilisateur: $utilisateur)
+                        .transition(.move(edge: .leading))
                 } else {
                     ExplorerCarteVue(utilisateur: $utilisateur)
                         .environmentObject(serviceEmplacements)
@@ -53,7 +52,11 @@ struct ExplorerVue: View {
         partenairesRecents: []
     )
     
-    ExplorerVue(utilisateur: .constant(mockUtilisateur))
-        .environmentObject(DonneesEmplacementService())
+    ExplorerVue(utilisateur: .constant(mockUtilisateur), serviceEmplacements: DonneesEmplacementService())
         .environmentObject(ActivitesVM(serviceEmplacements: DonneesEmplacementService(), serviceUtilisateurConnecte: UtilisateurConnecteVM()))
+            .environmentObject(AppVM())
+            .environmentObject(ExplorerListeVM(
+                serviceEmplacements: DonneesEmplacementService(),
+                serviceActivites: ServiceActivites()
+            ))
 }

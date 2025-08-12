@@ -11,6 +11,7 @@ struct VuePrincipale: View {
     @StateObject private var appVM = AppVM()
     @StateObject private var session: Session
     @StateObject private var activitesVM: ActivitesVM
+    @StateObject private var explorerListeVM: ExplorerListeVM // aussi haut pour garder les filtres actifs après le changement de tab
     @State private var estPresente = false
     @State private var afficherTabBar = true
     @State private var montrerPageAuthentification = false
@@ -20,6 +21,10 @@ struct VuePrincipale: View {
     init(serviceEmplacements: DonneesEmplacementService, utilisateurConnecteVM: UtilisateurConnecteVM, onDeconnexion: @escaping () -> Void) {
         self._activitesVM = StateObject(wrappedValue: ActivitesVM(serviceEmplacements: serviceEmplacements, serviceUtilisateurConnecte: utilisateurConnecteVM))
         self._session = StateObject(wrappedValue: Session(serviceEmplacements: serviceEmplacements, utilisateurConnecteVM: utilisateurConnecteVM))
+        self._explorerListeVM = StateObject(wrappedValue: ExplorerListeVM(
+            serviceEmplacements: serviceEmplacements,
+            serviceActivites: ServiceActivites()
+        ))
         self.onDeconnexion = onDeconnexion
     }
 
@@ -52,10 +57,10 @@ struct VuePrincipale: View {
                     .environmentObject(appVM)
                     .environmentObject(session)
             case .explorer:
-                ExplorerVue(utilisateur: .constant(mockUtilisateur))
-                    .environmentObject(serviceEmplacements)
+                ExplorerVue(utilisateur: .constant(mockUtilisateur), serviceEmplacements: serviceEmplacements)
                     .environmentObject(activitesVM)
                     .environmentObject(appVM)
+                    .environmentObject(explorerListeVM)
             case .creer:
                 Color.clear // ne sera jamais directement visible
             case .activites:
