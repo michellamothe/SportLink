@@ -33,6 +33,8 @@ struct CreerActiviteVue: View {
     
     private let titreLimite = 30
     private let descriptionLimite = 420
+    private let minGap: TimeInterval = 15 * 60 // 15 minutes
+
     
     init(serviceEmplacements: DonneesEmplacementService) {
         self._vm = StateObject(wrappedValue: CreerActiviteVM(serviceActivites: ServiceActivites(), serviceEmplacements: serviceEmplacements))
@@ -432,9 +434,13 @@ struct CreerActiviteVue: View {
                             .frame(width: 1, height: 60)
 
                         Button("OK") {
-                            if let d = vm.dateSelectionneeSelectionTemporaire {
-                                vm.dateSelectionnee = d
+                            var sd = vm.tempsDebutSelectionTemporaire!
+                            var ef = vm.tempsFinSelectionTemporaire!
+                            if ef < sd.addingTimeInterval(minGap) {
+                                ef = sd.addingTimeInterval(minGap)
                             }
+                            vm.tempsDebut = sd
+                            vm.tempsFin = ef
                             overlayActif = .none
                         }
                         .frame(maxWidth: .infinity, maxHeight: 60)
@@ -469,13 +475,14 @@ struct CreerActiviteVue: View {
                     get: { vm.tempsDebutSelectionTemporaire! },
                     set: { new in
                         vm.tempsDebutSelectionTemporaire = new
-                        // maintien de fin ≥ début
-                        if new > vm.tempsFinSelectionTemporaire! {
-                            vm.tempsFinSelectionTemporaire = new
+                        // fin ≥ début + 15min
+                        if let curEnd = vm.tempsFinSelectionTemporaire,
+                           curEnd < new.addingTimeInterval(minGap) {
+                            vm.tempsFinSelectionTemporaire = new.addingTimeInterval(minGap)
                         }
                     }
                 )
-                
+
                 let endBinding = Binding<Date>(
                     get: { vm.tempsFinSelectionTemporaire! },
                     set: { vm.tempsFinSelectionTemporaire = $0 }
@@ -501,9 +508,7 @@ struct CreerActiviteVue: View {
                         DatePicker(
                             "",
                             selection: endBinding,
-                            // on interdit avant 6h et après 22h,
-                            // et on bloque aussi en dessous du début choisi
-                            in: max(startBinding.wrappedValue, tempsMin)...tempsMax,
+                            in: max(startBinding.wrappedValue.addingTimeInterval(minGap), tempsMin)...tempsMax,
                             displayedComponents: .hourAndMinute
                         )
                         .datePickerStyle(.wheel)
