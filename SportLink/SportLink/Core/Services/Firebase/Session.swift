@@ -45,11 +45,7 @@ class Session: ObservableObject {
                     if let docs = snapshot?.documents {
                         do {
                             let dtos = try docs.map { try $0.data(as: ActiviteDTO.self) }
-                            var activites = dtos.map { $0.versActivite() }
-                            // 2) ID de secours
-                            for i in activites.indices where activites[i].id == nil {
-                                activites[i].id = UUID().uuidString
-                            }
+                            let activites = dtos.map { $0.versActivite() }
                             let filtrees = self.filtrerLesRecommandations(activites: activites)
                             self.activitesRecommandees = Array(filtrees.prefix(self.nombreActivitesRecommandeesAAfficheer))
                             self.estPret = true

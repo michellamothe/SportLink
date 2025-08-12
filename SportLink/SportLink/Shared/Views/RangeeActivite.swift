@@ -88,27 +88,31 @@ struct RangeeActivite: View {
                         .blur(radius: afficherInfo ? 6 : 0)
                 }
                 .overlay(alignment: .bottomTrailing) {
-                    Image(systemName: estFavoris ? "bookmark.fill" : "bookmark")
-                        .font(.system(size: 19))
-                        .foregroundStyle(estFavoris ? couleur : .white)
-                        .padding(8)
-                        .background(.ultraThinMaterial)
-                        .clipShape(Circle())
-                        .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 2)
-                        .padding([.bottom, .trailing], 8)
-                        .disabled(afficherInfo)
-                        .blur(radius: afficherInfo ? 6 : 0)
-                        .onAppear { estFavoris = activitesVM.estFavori(activite) }
-                        .onTapGesture {
-                            Task {
-                                // optimistic UI
-                                estFavoris.toggle()
-                                
-                                await activitesVM.toggleFavori(pour: activite, nouvelEtat: estFavoris)
-                                //estFavoris = activitesVM.estFavori(activite) // resync
-                              
+                    // MARK: Bouton favoris
+                    if !cacherBoutonJoin {
+                        Image(systemName: estFavoris ? "bookmark.fill" : "bookmark")
+                            .font(.system(size: 19))
+                            .foregroundStyle(estFavoris ? couleur : .white)
+                            .padding(8)
+                            .background(.ultraThinMaterial)
+                            .clipShape(Circle())
+                            .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 2)
+                            .padding([.bottom, .trailing], 8)
+                            .disabled(afficherInfo)
+                            .blur(radius: afficherInfo ? 6 : 0)
+                            .onAppear { estFavoris = activitesVM.estFavori(activite) }
+                            .onChange(of: activitesVM.estFavori(activite)) { _, nvValeur in
+                                if nvValeur == false {
+                                    estFavoris = false
+                                }
                             }
-                        }
+                            .onTapGesture {
+                                Task {
+                                    estFavoris.toggle()
+                                    await activitesVM.toggleFavori(pour: activite, nouvelEtat: estFavoris)
+                                }
+                            }
+                    }
                 }
                
                 VStack(alignment: .trailing, spacing: 6) {
@@ -169,7 +173,7 @@ struct RangeeActivite: View {
                     if !cacherBoutonJoin {
                         Divider()
                             .frame(width: 1, height: 50)
-
+                        
                         Button {
                             Task {
                                 do {

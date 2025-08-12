@@ -36,6 +36,28 @@ class ActivitesFavoritesVM: ObservableObject {
         estEnChargement = false
     }
     
+    func syncWithFavoris(_ ids: Set<String>) async {
+        // remove the ones no longer in favoris
+        let idSet = Set(activites.compactMap(\.id))
+        let toRemove = idSet.subtracting(ids)
+        if !toRemove.isEmpty {
+            activites.removeAll { a in toRemove.contains(a.id ?? "") }
+        }
+
+        // fetch the new ones
+        let toAdd = ids.subtracting(idSet)
+        if !toAdd.isEmpty {
+            await serviceActivites.fetchActivitesParIds(ids: Array(toAdd))
+            let fetched = serviceActivites.activites
+            let existing = Set(activites.compactMap(\.id))
+            for a in fetched {
+                if let id = a.id, !existing.contains(id) {
+                    activites.append(a)
+                }
+            }
+        }
+    }
+    
     func bindingActivite(id: String) -> Binding<Activite>? {
         guard let index = activites.firstIndex(where: { $0.id == id }) else { return nil }
         return Binding(

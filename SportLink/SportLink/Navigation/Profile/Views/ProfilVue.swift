@@ -15,19 +15,21 @@ struct ProfilVue: View {
     let onDeconnexion: () -> Void
     
     var body: some View {
-        VStack(spacing: 0) {
-            Text("Your Profile")
+        ZStack {
+            /*Text("Your profile")
                 .font(.headline)
                 .foregroundColor(.primary)
                 .padding(.top, 16)
                 .padding(.bottom, 12)
                 .frame(maxWidth: .infinity)
-                .background(Color.gray.opacity(0.05))
+                .background(Color.gray.opacity(0.05))*/
+            barreDeNavigation
             
             ScrollView {
                 VStack(spacing: 20) {
                     // Photo
                     photoProfil
+                        .padding(.top, 90)
 
                     // Nom d'utilisateur
                     Text(utilisateurVM.utilisateur?.nomUtilisateur ?? "Utilisateur")
@@ -50,10 +52,34 @@ struct ProfilVue: View {
                 }
                 .padding()
             }
-            .task {
-                await utilisateurVM.chargerInfosUtilisateur()
-            }
+            .task { await utilisateurVM.chargerInfosUtilisateur() }
         }
+        .background(Color(.systemGray6))
+    }
+    
+    @ViewBuilder
+    private var barreDeNavigation: some View {
+        VStack(spacing: 0) {
+            HStack(alignment: .center) {
+                Spacer()
+                Text("You")
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                    
+                Spacer()
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 12)
+            .padding(.horizontal, 20)
+            .background(
+                Color(.systemGray6)
+                    .ignoresSafeArea()
+                    .shadow(color: .black.opacity(0.15), radius: 5)
+            )
+            
+            Spacer()
+        }
+        .zIndex(1)
     }
     
     @ViewBuilder

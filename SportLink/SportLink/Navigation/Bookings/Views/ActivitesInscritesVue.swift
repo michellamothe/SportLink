@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ActivitesInscritesVue: View {
     @EnvironmentObject var activitesVM: ActivitesVM
+    @EnvironmentObject var appVM: AppVM
     @StateObject private var vm: ActivitesInscritesVM
     @State private var activiteAffichantInfo: Activite.ID? = nil
     
@@ -37,6 +38,7 @@ struct ActivitesInscritesVue: View {
                     DetailsActivite(activite: binding)
                         .environmentObject(activitesVM)
                         .environmentObject(vm)
+                        .environmentObject(appVM)
                         .cacherBoutonEditable()
                         .cacherBoutonJoin()
                 }

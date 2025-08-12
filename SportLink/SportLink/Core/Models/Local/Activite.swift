@@ -43,9 +43,11 @@ struct PlageHoraire: Codable {
     let fin: Date
 
     var interval: DateInterval {
-        DateInterval(start: debut, end: fin)
+        let start = min(debut, fin)
+        let end   = max(debut, fin)
+        return DateInterval(start: start, end: end)
     }
-
+    
     var affichage: (String, String, String) {
         struct Format {
             static let date: DateFormatter = {

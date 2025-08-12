@@ -48,6 +48,11 @@ struct DetailsActivite: View {
         .onChange(of: activite) { _, _ in
             refreshID = UUID()
         }
+        .onChange(of: estFavoris) { _, nvValeur in
+            if nvValeur == false {
+                dismiss()
+            }
+        }
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)
     }
@@ -176,8 +181,11 @@ struct EffetParallax: View {
 
 struct Details: View {
     // MARK: Variables et propriétés calculées
+    @Environment(\.dismiss) var dismiss
     @EnvironmentObject var activitesVM: ActivitesVM
     @EnvironmentObject var activitesOrganiseesVM: ActivitesOrganiseesVM
+    @EnvironmentObject var appVM: AppVM
+    @StateObject private var serviceActivites = ServiceActivites()
     @Environment(\.cacherBoutonJoin) var cacherBoutonJoin
     @Environment(\.cacherBoutonEditable) var cacherBoutonEditable
     @StateObject private var recherchePOI = RecherchePOIVM()
@@ -187,6 +195,8 @@ struct Details: View {
     @State private var itemRouteMap: MKMapItem?
     @State private var nomOrganisateur: String?
     @State private var photoOrganisateur: UIImage?
+    @State private var montrerDialogueFavoris = false
+    @State private var montrerDialogueSortir = false
     @Binding var estFavoris: Bool
     var activite: Activite
     let couleurDeFondDistance = Color(red: 0.784, green: 0.231, blue: 0.216)
@@ -222,6 +232,7 @@ struct Details: View {
                     carteInteractive
                     boutonOuvrirRouteDansMaps
                     boutonRejoindre
+                    boutonSortir
                 }
                 .padding(.vertical)
                 .padding(.horizontal, 20)
@@ -234,9 +245,45 @@ struct Details: View {
         .background(.white)
         .clipShape(UnevenRoundedRectangle(cornerRadii: .init(topLeading: 30, topTrailing: 30), style: .continuous))
         .shadow(color: Color.black.opacity(0.15), radius: 10, y: -18)
-        .confirmationDialog("Calendaar", isPresented: $montrerDialogueAjouterCalendrier, titleVisibility: .hidden) {
+        .confirmationDialog("Calendar", isPresented: $montrerDialogueAjouterCalendrier, titleVisibility: .hidden) {
             Button("Add to calendar") { }
             Button("Cancel", role: .cancel) { }
+        }
+        .alert("remove bookmark?".localizedFirstCapitalized,
+               isPresented: $montrerDialogueFavoris) {
+            Button("cancel".localizedCapitalized, role: .cancel) { }
+            Button("remove".localizedCapitalized, role: .destructive) {
+                Task {
+                    estFavoris = false
+                    await activitesVM.toggleFavori(pour: activite, nouvelEtat: estFavoris)
+                    dismiss()
+                }
+            }
+        } message: {
+            Text("this view will be discard.".localizedFirstCapitalized)
+        }
+        .alert("leave activity?".localizedFirstCapitalized, isPresented: $montrerDialogueSortir) {
+            Button("cancel".localizedCapitalized, role: .cancel) { }
+            Button("leave".localizedCapitalized, role: .destructive) {
+                Task {
+                    do {
+                        let utilisateur = try GestionnaireAuthentification.partage.obtenirUtilisateurAuthentifier()
+                        try await serviceActivites.updateParticipants(
+                            dans: activite.id!,
+                            pour: utilisateur.uid,
+                            ajouter: false
+                        )
+
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            dismiss()
+                        }
+                    } catch {
+                        print("Erreur lors de la mise à jour \(error)")
+                    }
+                }
+            }
+        } message: {
+            Text("leaving this activity will remove you from receiving notifications and messages about it.".localizedFirstCapitalized)
         }
     }
     
@@ -253,14 +300,27 @@ struct Details: View {
                     .foregroundStyle(Color.black.opacity(0.8))
             }
             Spacer()
-            // Mettre en favoris
-            Image(systemName: estFavoris ? "bookmark.fill" : "bookmark")
-                .font(.title2)
-                .foregroundStyle(estFavoris ? Color("CouleurParDefaut") : .black.opacity(0.9))
-                .padding(10)
-                .background(Color(.systemGray6))
-                .clipShape(Circle())
-                .onTapGesture { estFavoris.toggle() }
+            // MARK: Bouton favoris
+            if !cacherBoutonJoin {
+                Image(systemName: estFavoris ? "bookmark.fill" : "bookmark")
+                    .font(.title2)
+                    .foregroundStyle(estFavoris ? Color("CouleurParDefaut") : .black.opacity(0.9))
+                    .padding(10)
+                    .background(Color(.systemGray6))
+                    .clipShape(Circle())
+                    .onAppear { estFavoris = activitesVM.estFavori(activite) }
+                    .onTapGesture {
+                        if estFavoris {
+                            montrerDialogueFavoris = true
+                        } else {
+                            Task {
+                                estFavoris = true
+                                await activitesVM.toggleFavori(pour: activite, nouvelEtat: estFavoris)
+                            }
+                        }
+                    }
+                
+            }
         }
         .padding(.horizontal)
     }
@@ -483,9 +543,34 @@ struct Details: View {
     private var boutonRejoindre: some View {
         if !cacherBoutonJoin {
             Button {
-                // Join logic
+                Task {
+                    do {
+                        let utilisateur = try GestionnaireAuthentification.partage.obtenirUtilisateurAuthentifier()
+                        try await serviceActivites.updateParticipants(
+                            dans: activite.id!,
+                            pour: utilisateur.uid,
+                            ajouter: true
+                        )
+                        
+                        if activitesVM.estFavori(activite) {
+                            Task {
+                                estFavoris = false
+                                await activitesVM.toggleFavori(pour: activite, nouvelEtat: estFavoris)
+                            }
+                        }
+            
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            dismiss()
+                            appVM.ongletSelectionne = .activites
+                            appVM.trigger = .participe
+                            appVM.sousOngletSelectionne = .participe
+                        }
+                    } catch {
+                        print("Erreur lors de la mise à jour \(error)")
+                    }
+                }
             } label: {
-                Text("Join activity")
+                Text("join activity".localizedFirstCapitalized)
                     .font(.callout.weight(.semibold))
                     .foregroundStyle(.white)
             }
@@ -495,6 +580,22 @@ struct Details: View {
                 RoundedRectangle(cornerRadius: 20)
                     .fill(Color("CouleurParDefaut"))
             )
+        }
+    }
+    
+    @ViewBuilder
+    private var boutonSortir: some View {
+        if cacherBoutonJoin && cacherBoutonEditable {
+            Text("leave activity".localizedFirstCapitalized)
+                .font(.callout.weight(.semibold))
+                .foregroundStyle(Color("CouleurParDefaut"))
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(Color(.systemGray6))
+                )
+                .onTapGesture { montrerDialogueSortir = true }
         }
     }
 }

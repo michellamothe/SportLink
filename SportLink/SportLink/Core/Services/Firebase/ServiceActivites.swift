@@ -119,14 +119,8 @@ class ServiceActivites: ObservableObject {
 
             let activitesConverties = dtos.map { $0.versActivite() }
             print("Number of activites fetched: \(activitesConverties.count)")
-            
-            let activites = activitesConverties.map { activite in
-                var activiteMutable = activite
-                activiteMutable.id = UUID().uuidString
-                return activiteMutable
-            }
-            
-            self.activites = activites
+
+            self.activites = activitesConverties
         } catch {
             print("Erreur Hosted : \(error)")
         }

@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ActivitesFavoritesVue: View {
     @EnvironmentObject var activitesVM: ActivitesVM
+    @EnvironmentObject var appVM: AppVM
     @StateObject private var vm: ActivitesFavoritesVM
     @State private var activiteAffichantInfo: Activite.ID? = nil
     
@@ -25,8 +26,11 @@ struct ActivitesFavoritesVue: View {
         ScrollView { sectionActivites }
             .task {
                 if vm.activites.isEmpty {
-                    await vm.fetchActivitesFavorites()
+                    await vm.fetchActivitesFavorites() // initial load
                 }
+            }
+            .onReceive(activitesVM.$favoris.removeDuplicates()) { ids in
+                Task { await vm.syncWithFavoris(ids) } // live refresh
             }
             .refreshable { await vm.fetchActivitesFavorites() }
             .onTapGesture {
@@ -39,8 +43,8 @@ struct ActivitesFavoritesVue: View {
                     DetailsActivite(activite: binding)
                         .environmentObject(activitesVM)
                         .environmentObject(vm)
+                        .environmentObject(appVM)
                         .cacherBoutonEditable()
-                        .cacherBoutonJoin()
                 }
             }
     }
@@ -72,7 +76,6 @@ struct ActivitesFavoritesVue: View {
                             ),
                             activite: activite
                         )
-                        .cacherBoutonJoin()
                         .dateEtendue()
                     }
                 }

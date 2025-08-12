@@ -25,7 +25,7 @@ struct ActivitesVue: View {
         NavigationStack {
             VStack(spacing: 0) {
                 VStack(alignment: .center) {
-                    Text("Your dashboard")
+                    Text("Your bookings")
                         .font(.headline)
                         .foregroundColor(.primary)
                         .padding(.top, 10)

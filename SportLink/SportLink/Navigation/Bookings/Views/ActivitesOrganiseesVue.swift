@@ -10,7 +10,7 @@ import SwiftUI
 struct ActivitesOrganiseesVue: View {
     @EnvironmentObject var activitesVM: ActivitesVM
     @StateObject private var vm: ActivitesOrganiseesVM
-    
+    @EnvironmentObject var appVM: AppVM
     @State private var activiteAffichantInfo: Activite.ID? = nil
     @State private var activiteSelectionnee: Activite? = nil
     
@@ -35,6 +35,7 @@ struct ActivitesOrganiseesVue: View {
                     DetailsActivite(activite: binding)
                         .environmentObject(activitesVM)
                         .environmentObject(vm)
+                        .environmentObject(appVM)
                         .cacherBoutonEditable(false)
                         .cacherBoutonJoin()
                 }
